@@ -1,0 +1,161 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+
+import { PageHeader } from "@/components/dashboard/shell";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { aiEngines } from "@/mock/data";
+
+export const Route = createFileRoute("/app/balas-chat")({
+  head: () => ({
+    meta: [
+      { title: "Balas Chat Otomatis — Dashboard Balasin" },
+      { name: "description", content: "Atur gaya bahasa, mesin AI, dan ambang alih ke manusia untuk balasan chat otomatis." },
+      { property: "og:title", content: "Balas Chat Otomatis — Dashboard Balasin" },
+      { property: "og:description", content: "Atur gaya bahasa dan mesin AI untuk balasan chat otomatis." },
+    ],
+  }),
+  component: AutoChatPage,
+});
+
+function AutoChatPage() {
+  const [aktif, setAktif] = useState(true);
+  const [ambang, setAmbang] = useState([60]);
+
+  return (
+    <>
+      <PageHeader
+        title="Balas Chat Otomatis"
+        description="Bot menjawab chat biasa berdasarkan dokumen dan FAQ yang Anda unggah."
+        action={
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-2">
+            <span className="text-sm">{aktif ? "Menyala" : "Mati"}</span>
+            <Switch
+              checked={aktif}
+              onCheckedChange={(v) => {
+                setAktif(v);
+                toast.success(`Balas Chat Otomatis ${v ? "dinyalakan" : "dimatikan"}`);
+              }}
+            />
+          </div>
+        }
+      />
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+        <form
+          className="panel space-y-6 p-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            toast.success("Pengaturan disimpan (contoh)");
+          }}
+        >
+          <div className="grid gap-2">
+            <Label htmlFor="nama-bot">Nama bot</Label>
+            <Input id="nama-bot" defaultValue="Mela — Asisten Toko Bunga Melati" />
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="gaya">Gaya bahasa & instruksi</Label>
+            <Textarea
+              id="gaya"
+              rows={6}
+              defaultValue={
+                "Sapa pelanggan dengan 'Kak'. Gunakan Bahasa Indonesia santai tapi sopan, maksimal 3 kalimat. Jangan mengarang harga; jika tidak ada di FAQ, katakan akan dicek admin."
+              }
+            />
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label>Mesin AI</Label>
+              <Select defaultValue="deepseek-v4-flash">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {aiEngines.map((m) => (
+                    <SelectItem key={m.id} value={m.id}>
+                      {m.nama} — {m.catatan}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label>Bahasa balasan</Label>
+              <Select defaultValue="id">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="id">Bahasa Indonesia</SelectItem>
+                  <SelectItem value="auto">Ikuti bahasa pelanggan</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid gap-3">
+            <Label>Ambang alih ke manusia — {ambang[0]}%</Label>
+            <Slider value={ambang} onValueChange={setAmbang} max={100} step={5} />
+            <p className="text-xs text-muted-foreground">
+              Jika keyakinan jawaban di bawah nilai ini, chat ditandai untuk diambil alih admin.
+            </p>
+          </div>
+
+          <div className="space-y-3 rounded-lg border border-border bg-secondary/40 p-4">
+            <label className="flex items-center justify-between gap-3 text-sm">
+              Kirim sapaan pembuka otomatis
+              <Switch defaultChecked />
+            </label>
+            <label className="flex items-center justify-between gap-3 text-sm">
+              Berhenti membalas setelah admin masuk percakapan
+              <Switch defaultChecked />
+            </label>
+            <label className="flex items-center justify-between gap-3 text-sm">
+              Simpan transkrip percakapan
+              <Switch defaultChecked />
+            </label>
+          </div>
+
+          <Button type="submit">Simpan pengaturan</Button>
+        </form>
+
+        <aside className="panel h-fit p-6">
+          <h2 className="text-sm font-semibold">Cara kerja</h2>
+          <ol className="mt-4 space-y-4 text-sm text-muted-foreground">
+            <li>
+              <span className="font-medium text-foreground">1. Chat masuk</span>
+              <p>Pesan pelanggan diterima dari nomor WhatsApp yang tersambung.</p>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">2. Cari konteks</span>
+              <p>Sistem mencari bagian FAQ/dokumen yang paling relevan.</p>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">3. AI menyusun jawaban</span>
+              <p>Jawaban dibuat hanya dari konteks tersebut, mengikuti gaya bahasa Anda.</p>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">4. Kirim atau alihkan</span>
+              <p>Bila keyakinan rendah, chat dialihkan ke admin, bukan dijawab asal.</p>
+            </li>
+          </ol>
+        </aside>
+      </div>
+    </>
+  );
+}

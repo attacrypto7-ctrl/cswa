@@ -14,7 +14,10 @@ import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAuditRouteImport } from './routes/admin/audit'
+import { Route as AdminLicensesRouteImport } from './routes/admin/licenses'
 import { Route as AdminTenantsRouteImport } from './routes/admin/tenants'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppWhatsappRouteImport } from './routes/app/whatsapp'
 import { Route as AdminTenantsTenantIdRouteImport } from './routes/admin/tenants.$tenantId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -42,10 +45,25 @@ const AdminAuditRoute = AdminAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminLicensesRoute = AdminLicensesRouteImport.update({
+  id: '/licenses',
+  path: '/licenses',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminTenantsRoute = AdminTenantsRouteImport.update({
   id: '/tenants',
   path: '/tenants',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppWhatsappRoute = AppWhatsappRouteImport.update({
+  id: '/whatsapp',
+  path: '/whatsapp',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AdminTenantsTenantIdRoute = AdminTenantsTenantIdRouteImport.update({
   id: '/$tenantId',
@@ -56,28 +74,36 @@ const AdminTenantsTenantIdRoute = AdminTenantsTenantIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/app': typeof AppRouteRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/whatsapp': typeof AppWhatsappRoute
   '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRouteRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/whatsapp': typeof AppWhatsappRoute
   '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
-  '/app': typeof AppRouteRoute
+  '/app': typeof AppRouteRouteWithChildren
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/whatsapp': typeof AppWhatsappRoute
   '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
 }
 export interface FileRouteTypes {
@@ -87,16 +113,21 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/admin/audit'
+    | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/whatsapp'
     | '/admin/'
+    | '/app/'
     | '/admin/tenants/$tenantId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/app'
     | '/admin/audit'
+    | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/whatsapp'
     | '/admin'
+    | '/app'
     | '/admin/tenants/$tenantId'
   id:
     | '__root__'
@@ -104,15 +135,18 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/admin/audit'
+    | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/whatsapp'
     | '/admin/'
+    | '/app/'
     | '/admin/tenants/$tenantId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
-  AppRouteRoute: typeof AppRouteRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -152,12 +186,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/licenses': {
+      id: '/admin/licenses'
+      path: '/licenses'
+      fullPath: '/admin/licenses'
+      preLoaderRoute: typeof AdminLicensesRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/tenants': {
       id: '/admin/tenants'
       path: '/tenants'
       fullPath: '/admin/tenants'
       preLoaderRoute: typeof AdminTenantsRouteImport
       parentRoute: typeof AdminRouteRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/whatsapp': {
+      id: '/app/whatsapp'
+      path: '/whatsapp'
+      fullPath: '/app/whatsapp'
+      preLoaderRoute: typeof AppWhatsappRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/admin/tenants/$tenantId': {
       id: '/admin/tenants/$tenantId'
@@ -183,12 +238,14 @@ const AdminTenantsRouteWithChildren = AdminTenantsRoute._addFileChildren(
 
 interface AdminRouteRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
+  AdminLicensesRoute: typeof AdminLicensesRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
+  AdminLicensesRoute: AdminLicensesRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -197,10 +254,24 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface AppRouteRouteChildren {
+  AppWhatsappRoute: typeof AppWhatsappRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppWhatsappRoute: AppWhatsappRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
-  AppRouteRoute: AppRouteRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

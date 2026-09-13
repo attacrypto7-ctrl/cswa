@@ -74,7 +74,7 @@ function LicensesPage() {
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label>Tenant</Label>
-                  <Select defaultValue={tenants[0]?.id}>
+                  <Select defaultValue={tenants[0]?.id ?? ""}>
                     <SelectTrigger>
                       <SelectValue placeholder="Pilih tenant" />
                     </SelectTrigger>
