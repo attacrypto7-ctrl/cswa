@@ -17,6 +17,9 @@ import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminLicensesRouteImport } from './routes/admin/licenses'
 import { Route as AdminTenantsRouteImport } from './routes/admin/tenants'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppBalasChatRouteImport } from './routes/app/balas-chat'
+import { Route as AppBalasIklanRouteImport } from './routes/app/balas-iklan'
+import { Route as AppPengetahuanRouteImport } from './routes/app/pengetahuan'
 import { Route as AppWhatsappRouteImport } from './routes/app/whatsapp'
 import { Route as AdminTenantsTenantIdRouteImport } from './routes/admin/tenants.$tenantId'
 
@@ -60,6 +63,21 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppBalasChatRoute = AppBalasChatRouteImport.update({
+  id: '/balas-chat',
+  path: '/balas-chat',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppBalasIklanRoute = AppBalasIklanRouteImport.update({
+  id: '/balas-iklan',
+  path: '/balas-iklan',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppPengetahuanRoute = AppPengetahuanRouteImport.update({
+  id: '/pengetahuan',
+  path: '/pengetahuan',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppWhatsappRoute = AppWhatsappRouteImport.update({
   id: '/whatsapp',
   path: '/whatsapp',
@@ -78,6 +96,9 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/balas-chat': typeof AppBalasChatRoute
+  '/app/balas-iklan': typeof AppBalasIklanRoute
+  '/app/pengetahuan': typeof AppPengetahuanRoute
   '/app/whatsapp': typeof AppWhatsappRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
@@ -88,6 +109,9 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/balas-chat': typeof AppBalasChatRoute
+  '/app/balas-iklan': typeof AppBalasIklanRoute
+  '/app/pengetahuan': typeof AppPengetahuanRoute
   '/app/whatsapp': typeof AppWhatsappRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
@@ -101,6 +125,9 @@ export interface FileRoutesById {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/licenses': typeof AdminLicensesRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
+  '/app/balas-chat': typeof AppBalasChatRoute
+  '/app/balas-iklan': typeof AppBalasIklanRoute
+  '/app/pengetahuan': typeof AppPengetahuanRoute
   '/app/whatsapp': typeof AppWhatsappRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
@@ -115,6 +142,9 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/balas-chat'
+    | '/app/balas-iklan'
+    | '/app/pengetahuan'
     | '/app/whatsapp'
     | '/admin/'
     | '/app/'
@@ -125,6 +155,9 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/balas-chat'
+    | '/app/balas-iklan'
+    | '/app/pengetahuan'
     | '/app/whatsapp'
     | '/admin'
     | '/app'
@@ -137,6 +170,9 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/licenses'
     | '/admin/tenants'
+    | '/app/balas-chat'
+    | '/app/balas-iklan'
+    | '/app/pengetahuan'
     | '/app/whatsapp'
     | '/admin/'
     | '/app/'
@@ -207,6 +243,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/balas-chat': {
+      id: '/app/balas-chat'
+      path: '/balas-chat'
+      fullPath: '/app/balas-chat'
+      preLoaderRoute: typeof AppBalasChatRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/balas-iklan': {
+      id: '/app/balas-iklan'
+      path: '/balas-iklan'
+      fullPath: '/app/balas-iklan'
+      preLoaderRoute: typeof AppBalasIklanRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/pengetahuan': {
+      id: '/app/pengetahuan'
+      path: '/pengetahuan'
+      fullPath: '/app/pengetahuan'
+      preLoaderRoute: typeof AppPengetahuanRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/whatsapp': {
       id: '/app/whatsapp'
       path: '/whatsapp'
@@ -255,11 +312,17 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 interface AppRouteRouteChildren {
+  AppBalasChatRoute: typeof AppBalasChatRoute
+  AppBalasIklanRoute: typeof AppBalasIklanRoute
+  AppPengetahuanRoute: typeof AppPengetahuanRoute
   AppWhatsappRoute: typeof AppWhatsappRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppBalasChatRoute: AppBalasChatRoute,
+  AppBalasIklanRoute: AppBalasIklanRoute,
+  AppPengetahuanRoute: AppPengetahuanRoute,
   AppWhatsappRoute: AppWhatsappRoute,
   AppIndexRoute: AppIndexRoute,
 }
