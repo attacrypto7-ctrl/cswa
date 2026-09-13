@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { formatDate, formatNumber, getTenants } from "@/mock/api";
 
-export const Route = createFileRoute("/admin/tenants")({
+export const Route = createFileRoute("/admin/tenants/")({
   head: () => ({
     meta: [
       { title: "Daftar Tenant — Balasin Admin" },
