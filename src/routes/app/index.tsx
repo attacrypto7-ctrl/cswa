@@ -7,7 +7,7 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { StatusPill, toneForWa } from "@/components/dashboard/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { daysLeft, formatNumber, getChatLogs, getWaNumbers } from "@/mock/api";
+import { formatNumber, getChatLogs, getWaNumbers } from "@/mock/api";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -24,9 +24,13 @@ export const Route = createFileRoute("/app/")({
 function TenantOverview() {
   const { data: numbers = [] } = useQuery({ queryKey: ["wa"], queryFn: getWaNumbers });
   const { data: logs = [] } = useQuery({ queryKey: ["chats"], queryFn: getChatLogs });
+  const { data: licenses = [] } = useQuery({
+    queryKey: ["licenses", "t-001"],
+    queryFn: () => getWaNumbers().then(() => []), // Placeholder for logic
+  });
 
   const perluManusia = logs.filter((l) => l.status === "perlu manusia").length;
-  const sisa = daysLeft("2026-10-01");
+  const sisa = 18; // Default fallback for preview
 
   return (
     <>

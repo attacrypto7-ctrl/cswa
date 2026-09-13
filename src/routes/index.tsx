@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Bot, FileText, MessageSquare, QrCode, ShieldCheck, Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { AmbientBackground } from "@/components/ui/ambient-background";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,57 +58,60 @@ const fitur = [
 
 function Landing() {
   return (
-    <div className="surface-grid min-h-screen">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <span className="flex items-center gap-2 text-lg font-bold">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <Bot className="size-5" />
-          </span>
-          Balasin
-        </span>
-        <div className="flex gap-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/admin">Masuk Admin</Link>
-          </Button>
-          <Button asChild size="sm">
-            <Link to="/app">Dashboard Tenant</Link>
-          </Button>
-        </div>
-      </header>
-
-      <section className="mx-auto max-w-6xl px-6 pt-14 pb-20 text-center">
-        <span className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-          Pratinjau antarmuka — data masih contoh
-        </span>
-        <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl">
-          Customer service <span className="text-gradient-brand">WhatsApp</span> yang membalas
-          sendiri
-        </h1>
-        <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground">
-          Satu platform untuk banyak bisnis: sambungkan nomor WhatsApp, unggah FAQ, dan AI
-          menjawab pelanggan 24 jam dengan jawaban yang Anda kendalikan.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg">
-            <Link to="/app">Lihat Dashboard Tenant</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to="/admin">Lihat Dashboard Admin</Link>
-          </Button>
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-6xl gap-4 px-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
-        {fitur.map((f) => (
-          <article key={f.judul} className="panel p-6">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <f.icon className="size-5" />
+    <>
+      <AmbientBackground />
+      <div className="surface-grid min-h-screen">
+        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+          <span className="flex items-center gap-2 text-lg font-bold">
+            <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+              <Bot className="size-5" />
             </span>
-            <h2 className="mt-4 text-base font-semibold">{f.judul}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{f.teks}</p>
-          </article>
-        ))}
-      </section>
-    </div>
+            Balasin
+          </span>
+          <div className="flex gap-2">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/admin">Masuk Admin</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/app">Dashboard Tenant</Link>
+            </Button>
+          </div>
+        </header>
+
+        <section className="mx-auto max-w-6xl px-6 pt-14 pb-20 text-center">
+          <span className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
+            Pratinjau antarmuka — data masih contoh
+          </span>
+          <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl">
+            Customer service <span className="text-gradient-brand">WhatsApp</span> yang membalas
+            sendiri
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground">
+            Satu platform untuk banyak bisnis: sambungkan nomor WhatsApp, unggah FAQ, dan AI
+            menjawab pelanggan 24 jam dengan jawaban yang Anda kendalikan.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button asChild size="lg">
+              <Link to="/app">Lihat Dashboard Tenant</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/admin">Lihat Dashboard Admin</Link>
+            </Button>
+          </div>
+        </section>
+
+        <section className="mx-auto grid max-w-6xl gap-4 px-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+          {fitur.map((f) => (
+            <article key={f.judul} className="panel p-6">
+              <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <f.icon className="size-5" />
+              </span>
+              <h2 className="mt-4 text-base font-semibold">{f.judul}</h2>
+              <p className="mt-2 text-sm text-muted-foreground">{f.teks}</p>
+            </article>
+          ))}
+        </section>
+      </div>
+    </>
   );
 }
