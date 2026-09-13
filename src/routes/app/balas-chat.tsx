@@ -16,7 +16,14 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { aiEngines } from "@/mock/data";
+
+// Tingkat "kepintaran" bot — nama model AI teknis disembunyikan dari tenant,
+// dan dipetakan ke model aslinya di sisi backend.
+const tingkatAi = [
+  { id: "hemat", nama: "Hemat", catatan: "Cepat & murah, cocok untuk chat sehari-hari" },
+  { id: "seimbang", nama: "Seimbang", catatan: "Lebih pintar, biaya sedang" },
+  { id: "akurat", nama: "Paling Akurat", catatan: "Paling teliti, untuk jawaban yang harus presisi" },
+];
 
 export const Route = createFileRoute("/app/balas-chat")({
   head: () => ({
@@ -79,13 +86,13 @@ function AutoChatPage() {
 
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="grid gap-2">
-              <Label>Mesin AI</Label>
-              <Select defaultValue="deepseek-v4-flash">
+              <Label>Tingkat kepintaran bot</Label>
+              <Select defaultValue="hemat">
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {aiEngines.map((m) => (
+                  {tingkatAi.map((m) => (
                     <SelectItem key={m.id} value={m.id}>
                       {m.nama} — {m.catatan}
                     </SelectItem>
@@ -109,10 +116,11 @@ function AutoChatPage() {
           </div>
 
           <div className="grid gap-3">
-            <Label>Ambang alih ke manusia — {ambang[0]}%</Label>
+            <Label>Seberapa cepat bot minta bantuan Anda — {ambang[0]}%</Label>
             <Slider value={ambang} onValueChange={setAmbang} max={100} step={5} />
             <p className="text-xs text-muted-foreground">
-              Jika keyakinan jawaban di bawah nilai ini, chat ditandai untuk diambil alih admin.
+              Kalau bot ragu-ragu menjawab, chat otomatis ditandai untuk Anda ambil alih. Makin
+              tinggi angkanya, makin cepat bot menyerah dan minta bantuan.
             </p>
           </div>
 
@@ -142,16 +150,16 @@ function AutoChatPage() {
               <p>Pesan pelanggan diterima dari nomor WhatsApp yang tersambung.</p>
             </li>
             <li>
-              <span className="font-medium text-foreground">2. Cari konteks</span>
-              <p>Sistem mencari bagian FAQ/dokumen yang paling relevan.</p>
+              <span className="font-medium text-foreground">2. Cari jawaban di data Anda</span>
+              <p>Sistem mencari info yang paling cocok dari FAQ/dokumen yang sudah diunggah.</p>
             </li>
             <li>
               <span className="font-medium text-foreground">3. AI menyusun jawaban</span>
-              <p>Jawaban dibuat hanya dari konteks tersebut, mengikuti gaya bahasa Anda.</p>
+              <p>Jawaban dibuat hanya dari info tadi, mengikuti gaya bahasa Anda.</p>
             </li>
             <li>
-              <span className="font-medium text-foreground">4. Kirim atau alihkan</span>
-              <p>Bila keyakinan rendah, chat dialihkan ke admin, bukan dijawab asal.</p>
+              <span className="font-medium text-foreground">4. Kirim atau minta bantuan</span>
+              <p>Kalau bot kurang yakin, chat dialihkan ke Anda, bukan dijawab asal-asalan.</p>
             </li>
           </ol>
         </aside>

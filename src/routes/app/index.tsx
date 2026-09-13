@@ -96,10 +96,6 @@ function TenantOverview() {
               <span className="text-muted-foreground">Balas Iklan Otomatis</span>
               <span>1.680</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Token terpakai</span>
-              <span>1,24 jt</span>
-            </div>
           </div>
         </section>
       </div>

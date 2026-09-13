@@ -32,6 +32,13 @@ export const Route = createFileRoute("/app/pengetahuan")({
   component: KnowledgePage,
 });
 
+// Ganti istilah teknis status dokumen jadi bahasa yang mudah dipahami tenant
+function labelStatusDokumen(status: string) {
+  if (status === "terindeks" || status === "siap_dipakai") return "Siap dipakai";
+  if (status === "memproses" || status === "sedang_diproses") return "Sedang diproses";
+  return "Gagal diproses";
+}
+
 function KnowledgePage() {
   const { data: docs = [] } = useQuery({ queryKey: ["docs"], queryFn: getKnowledgeDocs });
   const { data: faqs = [] } = useQuery({ queryKey: ["faqs"], queryFn: getFaqItems });
@@ -71,7 +78,6 @@ function KnowledgePage() {
                   <TableHead>Nama</TableHead>
                   <TableHead>Tipe</TableHead>
                   <TableHead>Ukuran</TableHead>
-                  <TableHead>Potongan</TableHead>
                   <TableHead>Versi</TableHead>
                   <TableHead>Diperbarui</TableHead>
                   <TableHead>Status</TableHead>
@@ -87,12 +93,11 @@ function KnowledgePage() {
                     </TableCell>
                     <TableCell>{d.tipe}</TableCell>
                     <TableCell>{d.ukuran}</TableCell>
-                    <TableCell>{d.potongan}</TableCell>
                     <TableCell>v{d.versi}</TableCell>
                     <TableCell>{formatDate(d.diperbarui)}</TableCell>
                     <TableCell>
                       <StatusPill
-                        label={d.status}
+                        label={labelStatusDokumen(d.status)}
                         tone={
                           d.status === "terindeks" ? "success" : d.status === "memproses" ? "info" : "danger"
                         }
