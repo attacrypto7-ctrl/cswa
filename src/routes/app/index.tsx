@@ -24,8 +24,13 @@ export const Route = createFileRoute("/app/")({
 function TenantOverview() {
   const { data: numbers = [] } = useQuery({ queryKey: ["wa"], queryFn: getWaNumbers });
   const { data: logs = [] } = useQuery({ queryKey: ["chats"], queryFn: getChatLogs });
+  const { data: licenses = [] } = useQuery({
+    queryKey: ["licenses", "t-001"],
+    queryFn: () => getWaNumbers().then(() => []), // Placeholder for logic
+  });
 
   const perluManusia = logs.filter((l) => l.status === "perlu manusia").length;
+  const sisa = 18; // Default fallback for preview
 
   return (
     <>
