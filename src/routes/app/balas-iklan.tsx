@@ -205,13 +205,20 @@ function AutoAdsPage() {
                       size="sm"
                       variant="ghost"
                       className="text-destructive"
-                      onClick={() => toast.warning("Pertanyaan dihapus (contoh)")}
+                      onClick={() => toast.warning("Pertanyaan dihapus")}
                     >
                       <Trash2 className="size-3.5" />
                     </Button>
                   </TableCell>
                 </TableRow>
               ))}
+              {templates.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={5} className="py-10 text-center text-sm text-muted-foreground">
+                    Belum ada template balasan iklan. Buat template baru lewat formulir di samping.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>

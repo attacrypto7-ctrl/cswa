@@ -7,7 +7,7 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { StatusPill, toneForWa } from "@/components/dashboard/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { formatNumber, getChatLogs, getWaNumbers } from "@/mock/api";
+import { formatNumber, getChatLogs, getLicenses, getWaNumbers } from "@/mock/api";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -24,13 +24,14 @@ export const Route = createFileRoute("/app/")({
 function TenantOverview() {
   const { data: numbers = [] } = useQuery({ queryKey: ["wa"], queryFn: getWaNumbers });
   const { data: logs = [] } = useQuery({ queryKey: ["chats"], queryFn: getChatLogs });
-  const { data: licenses = [] } = useQuery({
-    queryKey: ["licenses", "t-001"],
-    queryFn: () => getWaNumbers().then(() => []), // Placeholder for logic
-  });
+  const { data: licenses = [] } = useQuery({ queryKey: ["licenses"], queryFn: getLicenses });
 
+  const activeLicense = licenses[0] ?? null;
+  const connectedNumbers = numbers.filter((n) => n.status === "tersambung").length;
+  const totalChat = logs.length;
   const perluManusia = logs.filter((l) => l.status === "perlu manusia").length;
-  const sisa = 18; // Default fallback for preview
+  const kuotaChat = activeLicense?.kuotaChat ?? 0;
+  const persenKuota = kuotaChat > 0 ? Math.min(100, Math.round((totalChat / kuotaChat) * 100)) : 0;
 
   return (
     <>
@@ -47,40 +48,51 @@ function TenantOverview() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Nomor tersambung"
-          value={`${numbers.filter((n) => n.status === "tersambung").length} / ${numbers.length}`}
+          value={`${connectedNumbers} / ${numbers.length}`}
           icon={Smartphone}
           tone="success"
         />
-        <StatCard label="Chat hari ini" value={formatNumber(412)} icon={MessagesSquare} hint="+18% vs kemarin" />
+        <StatCard label="Chat hari ini" value={formatNumber(totalChat)} icon={MessagesSquare} hint="Total chat masuk" />
         <StatCard
           label="Perlu ditangani manusia"
           value={String(perluManusia)}
           icon={ShieldQuestion}
           tone="warning"
         />
-        <StatCard label="Sisa lisensi" value={`${sisa} hari`} icon={CalendarClock} hint="Berakhir 01 Okt 2026" />
+        <StatCard
+          label="Sisa lisensi"
+          value={activeLicense ? "Aktif" : "-"}
+          icon={CalendarClock}
+          hint={activeLicense ? `Paket ${activeLicense.plan}` : "Belum ada lisensi"}
+        />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <section className="panel p-5 lg:col-span-2">
           <h2 className="text-sm font-semibold">Status nomor WhatsApp</h2>
-          <ul className="mt-4 space-y-3">
-            {numbers.map((n) => (
-              <li
-                key={n.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/40 px-4 py-3"
-              >
-                <div>
-                  <p className="text-sm font-medium">{n.label}</p>
-                  <p className="font-mono text-xs text-muted-foreground">{n.nomor}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground">{n.terakhirAktif}</span>
-                  <StatusPill label={n.status} tone={toneForWa(n.status)} />
-                </div>
-              </li>
-            ))}
-          </ul>
+          {numbers.length > 0 ? (
+            <ul className="mt-4 space-y-3">
+              {numbers.map((n) => (
+                <li
+                  key={n.id}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-secondary/40 px-4 py-3"
+                >
+                  <div>
+                    <p className="text-sm font-medium">{n.label}</p>
+                    <p className="font-mono text-xs text-muted-foreground">{n.nomor}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground">{n.terakhirAktif}</span>
+                    <StatusPill label={n.status} tone={toneForWa(n.status)} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-4 rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+              Belum ada nomor WhatsApp yang terhubung.
+            </div>
+          )}
           <Button asChild variant="ghost" size="sm" className="mt-4">
             <Link to="/app/whatsapp">Kelola koneksi →</Link>
           </Button>
@@ -88,17 +100,19 @@ function TenantOverview() {
 
         <section className="panel p-5">
           <h2 className="text-sm font-semibold">Kuota chat bulan ini</h2>
-          <p className="mt-4 text-3xl font-semibold">4.820</p>
-          <p className="text-xs text-muted-foreground">dari kuota 10.000 chat</p>
-          <Progress value={48} className="mt-4 h-2" />
+          <p className="mt-4 text-3xl font-semibold">{formatNumber(totalChat)}</p>
+          <p className="text-xs text-muted-foreground">
+            {kuotaChat > 0 ? `dari kuota ${formatNumber(kuotaChat)} chat` : "Belum ada kuota aktif"}
+          </p>
+          <Progress value={persenKuota} className="mt-4 h-2" />
           <div className="mt-6 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Balas Chat Otomatis</span>
-              <span>3.140</span>
+              <span>{logs.filter((l) => l.kanal === "Chat").length}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Balas Iklan Otomatis</span>
-              <span>1.680</span>
+              <span>{logs.filter((l) => l.kanal === "Iklan").length}</span>
             </div>
           </div>
         </section>

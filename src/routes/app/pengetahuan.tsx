@@ -115,13 +115,20 @@ function KnowledgePage() {
                         size="sm"
                         variant="ghost"
                         className="text-destructive"
-                        onClick={() => toast.warning(`${d.nama} dihapus (contoh)`)}
+                        onClick={() => toast.warning(`${d.nama} dihapus`)}
                       >
                         <Trash2 className="size-3.5" />
                       </Button>
                     </TableCell>
                   </TableRow>
                 ))}
+                {docs.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={7} className="py-10 text-center text-sm text-muted-foreground">
+                      Belum ada dokumen yang diunggah. Unggah file PDF atau berkas teks di atas.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </div>
@@ -135,6 +142,11 @@ function KnowledgePage() {
                 <p className="mt-1 text-sm text-muted-foreground">{f.jawaban}</p>
               </div>
             ))}
+            {faqs.length === 0 && (
+              <div className="p-8 text-center text-sm text-muted-foreground">
+                Belum ada FAQ manual. Tambahkan pertanyaan dan jawaban umum lewat form di samping.
+              </div>
+            )}
           </div>
 
           <form

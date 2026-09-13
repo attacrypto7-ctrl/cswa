@@ -34,6 +34,7 @@ function AdminOverview() {
   const aktif = licenses.filter((l) => l.status === "aktif");
   const segera = aktif.filter((l) => daysLeft(l.berakhir) <= 30);
   const totalChat = tenants.reduce((a, t) => a + t.chatBulanIni, 0);
+  const suspendedCount = tenants.filter((t) => t.status === "suspend").length;
 
   return (
     <>
@@ -43,7 +44,12 @@ function AdminOverview() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total tenant" value={String(tenants.length)} icon={Building2} hint="1 tenant ditangguhkan" />
+        <StatCard
+          label="Total tenant"
+          value={String(tenants.length)}
+          icon={Building2}
+          hint={suspendedCount > 0 ? `${suspendedCount} tenant ditangguhkan` : "Semua aktif"}
+        />
         <StatCard label="Lisensi aktif" value={String(aktif.length)} icon={KeyRound} tone="success" />
         <StatCard
           label="Segera kedaluwarsa"
@@ -98,6 +104,13 @@ function AdminOverview() {
                   </TableRow>
                 );
               })}
+            {licenses.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} className="py-8 text-center text-sm text-muted-foreground">
+                  Belum ada data lisensi.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </section>

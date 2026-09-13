@@ -174,6 +174,13 @@ function LicensesPage() {
                 </TableRow>
               );
             })}
+            {licenses.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="py-10 text-center text-sm text-muted-foreground">
+                  Belum ada lisensi yang dibuat. Klik "Buat lisensi" di atas untuk menambahkan lisensi baru.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

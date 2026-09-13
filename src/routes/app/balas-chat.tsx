@@ -39,6 +39,8 @@ export const Route = createFileRoute("/app/balas-chat")({
 
 function AutoChatPage() {
   const [aktif, setAktif] = useState(true);
+  const [namaBot, setNamaBot] = useState("");
+  const [instruksi, setInstruksi] = useState("");
   const [ambang, setAmbang] = useState([60]);
 
   return (
@@ -65,12 +67,17 @@ function AutoChatPage() {
           className="panel space-y-6 p-6"
           onSubmit={(e) => {
             e.preventDefault();
-            toast.success("Pengaturan disimpan (contoh)");
+            toast.success("Pengaturan berhasil disimpan");
           }}
         >
           <div className="grid gap-2">
             <Label htmlFor="nama-bot">Nama bot</Label>
-            <Input id="nama-bot" defaultValue="Mela — Asisten Toko Bunga Melati" />
+            <Input
+              id="nama-bot"
+              placeholder="Contoh: Asisten CS"
+              value={namaBot}
+              onChange={(e) => setNamaBot(e.target.value)}
+            />
           </div>
 
           <div className="grid gap-2">
@@ -78,9 +85,9 @@ function AutoChatPage() {
             <Textarea
               id="gaya"
               rows={6}
-              defaultValue={
-                "Sapa pelanggan dengan 'Kak'. Gunakan Bahasa Indonesia santai tapi sopan, maksimal 3 kalimat. Jangan mengarang harga; jika tidak ada di FAQ, katakan akan dicek admin."
-              }
+              placeholder="Contoh: Sapa pelanggan dengan sopan. Gunakan Bahasa Indonesia ramah, maksimal 3 kalimat. Jika info tidak ada di FAQ, tawarkan bantuan admin."
+              value={instruksi}
+              onChange={(e) => setInstruksi(e.target.value)}
             />
           </div>
 

@@ -24,10 +24,7 @@ import { Route as AppPengetahuanRouteImport } from './routes/app/pengetahuan'
 import { Route as AppPercakapanRouteImport } from './routes/app/percakapan'
 import { Route as AppUjiCobaRouteImport } from './routes/app/uji-coba'
 import { Route as AppWhatsappRouteImport } from './routes/app/whatsapp'
-import { Route as AppPercakapanRouteImport } from './routes/app/percakapan'
-import { Route as AppUjiCobaRouteImport } from './routes/app/uji-coba'
-import { Route as AppAnalitikRouteImport } from './routes/app/analitik'
-import { Route as AppLisensiRouteImport } from './routes/app/lisensi'
+import { Route as AdminTenantsIndexRouteImport } from './routes/admin/tenants.index'
 import { Route as AdminTenantsTenantIdRouteImport } from './routes/admin/tenants.$tenantId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -105,25 +102,10 @@ const AppWhatsappRoute = AppWhatsappRouteImport.update({
   path: '/whatsapp',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppPercakapanRoute = AppPercakapanRouteImport.update({
-  id: '/percakapan',
-  path: '/percakapan',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppUjiCobaRoute = AppUjiCobaRouteImport.update({
-  id: '/uji-coba',
-  path: '/uji-coba',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppAnalitikRoute = AppAnalitikRouteImport.update({
-  id: '/analitik',
-  path: '/analitik',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppLisensiRoute = AppLisensiRouteImport.update({
-  id: '/lisensi',
-  path: '/lisensi',
-  getParentRoute: () => AppRouteRoute,
+const AdminTenantsIndexRoute = AdminTenantsIndexRouteImport.update({
+  id: '/tenants/',
+  path: '/tenants/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminTenantsTenantIdRoute = AdminTenantsTenantIdRouteImport.update({
   id: '/tenants/$tenantId',
@@ -145,10 +127,6 @@ export interface FileRoutesByFullPath {
   '/app/percakapan': typeof AppPercakapanRoute
   '/app/uji-coba': typeof AppUjiCobaRoute
   '/app/whatsapp': typeof AppWhatsappRoute
-  '/app/percakapan': typeof AppPercakapanRoute
-  '/app/uji-coba': typeof AppUjiCobaRoute
-  '/app/analitik': typeof AppAnalitikRoute
-  '/app/lisensi': typeof AppLisensiRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
@@ -166,10 +144,6 @@ export interface FileRoutesByTo {
   '/app/percakapan': typeof AppPercakapanRoute
   '/app/uji-coba': typeof AppUjiCobaRoute
   '/app/whatsapp': typeof AppWhatsappRoute
-  '/app/percakapan': typeof AppPercakapanRoute
-  '/app/uji-coba': typeof AppUjiCobaRoute
-  '/app/analitik': typeof AppAnalitikRoute
-  '/app/lisensi': typeof AppLisensiRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
@@ -190,10 +164,6 @@ export interface FileRoutesById {
   '/app/percakapan': typeof AppPercakapanRoute
   '/app/uji-coba': typeof AppUjiCobaRoute
   '/app/whatsapp': typeof AppWhatsappRoute
-  '/app/percakapan': typeof AppPercakapanRoute
-  '/app/uji-coba': typeof AppUjiCobaRoute
-  '/app/analitik': typeof AppAnalitikRoute
-  '/app/lisensi': typeof AppLisensiRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
   '/admin/tenants/$tenantId': typeof AdminTenantsTenantIdRoute
@@ -215,10 +185,6 @@ export interface FileRouteTypes {
     | '/app/percakapan'
     | '/app/uji-coba'
     | '/app/whatsapp'
-    | '/app/percakapan'
-    | '/app/uji-coba'
-    | '/app/analitik'
-    | '/app/lisensi'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$tenantId'
@@ -236,10 +202,6 @@ export interface FileRouteTypes {
     | '/app/percakapan'
     | '/app/uji-coba'
     | '/app/whatsapp'
-    | '/app/percakapan'
-    | '/app/uji-coba'
-    | '/app/analitik'
-    | '/app/lisensi'
     | '/admin'
     | '/app'
     | '/admin/tenants/$tenantId'
@@ -259,10 +221,6 @@ export interface FileRouteTypes {
     | '/app/percakapan'
     | '/app/uji-coba'
     | '/app/whatsapp'
-    | '/app/percakapan'
-    | '/app/uji-coba'
-    | '/app/analitik'
-    | '/app/lisensi'
     | '/admin/'
     | '/app/'
     | '/admin/tenants/$tenantId'
@@ -382,33 +340,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWhatsappRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/percakapan': {
-      id: '/app/percakapan'
-      path: '/percakapan'
-      fullPath: '/app/percakapan'
-      preLoaderRoute: typeof AppPercakapanRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/uji-coba': {
-      id: '/app/uji-coba'
-      path: '/uji-coba'
-      fullPath: '/app/uji-coba'
-      preLoaderRoute: typeof AppUjiCobaRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/analitik': {
-      id: '/app/analitik'
-      path: '/analitik'
-      fullPath: '/app/analitik'
-      preLoaderRoute: typeof AppAnalitikRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/lisensi': {
-      id: '/app/lisensi'
-      path: '/lisensi'
-      fullPath: '/app/lisensi'
-      preLoaderRoute: typeof AppLisensiRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/admin/tenants/': {
+      id: '/admin/tenants/'
+      path: '/tenants'
+      fullPath: '/admin/tenants/'
+      preLoaderRoute: typeof AdminTenantsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/admin/tenants/$tenantId': {
       id: '/admin/tenants/$tenantId'
@@ -449,10 +386,6 @@ interface AppRouteRouteChildren {
   AppPercakapanRoute: typeof AppPercakapanRoute
   AppUjiCobaRoute: typeof AppUjiCobaRoute
   AppWhatsappRoute: typeof AppWhatsappRoute
-  AppPercakapanRoute: typeof AppPercakapanRoute
-  AppUjiCobaRoute: typeof AppUjiCobaRoute
-  AppAnalitikRoute: typeof AppAnalitikRoute
-  AppLisensiRoute: typeof AppLisensiRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -465,10 +398,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppPercakapanRoute: AppPercakapanRoute,
   AppUjiCobaRoute: AppUjiCobaRoute,
   AppWhatsappRoute: AppWhatsappRoute,
-  AppPercakapanRoute: AppPercakapanRoute,
-  AppUjiCobaRoute: AppUjiCobaRoute,
-  AppAnalitikRoute: AppAnalitikRoute,
-  AppLisensiRoute: AppLisensiRoute,
   AppIndexRoute: AppIndexRoute,
 }
 

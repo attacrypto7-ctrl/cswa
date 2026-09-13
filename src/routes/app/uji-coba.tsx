@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bot, RotateCcw, Send, Sparkles, User } from "lucide-react";
 import { useState } from "react";
@@ -14,7 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { aiEngines, faqItems, adTemplates } from "@/mock/data";
+import { getAdTemplates, getFaqItems, getKnowledgeDocs } from "@/mock/api";
+import { aiEngines } from "@/mock/data";
 
 export const Route = createFileRoute("/app/uji-coba")({
   head: () => ({
@@ -37,19 +39,14 @@ interface Message {
   time: string;
 }
 
-const initialMessages: Message[] = [
-  {
-    id: "m-1",
-    sender: "bot",
-    text: "Halo Kak! Terima kasih sudah menghubungi Toko Bunga Melati. Ada yang bisa kami bantu hari ini? 😊",
-    time: "10:00",
-  },
-];
-
 export function UjiCobaPage() {
+  const { data: docs = [] } = useQuery({ queryKey: ["docs"], queryFn: getKnowledgeDocs });
+  const { data: faqs = [] } = useQuery({ queryKey: ["faqs"], queryFn: getFaqItems });
+  const { data: ads = [] } = useQuery({ queryKey: ["ads"], queryFn: getAdTemplates });
+
   const [engine, setEngine] = useState("deepseek-v4-flash");
   const [kanal, setKanal] = useState<"chat" | "iklan">("chat");
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -71,14 +68,14 @@ export function UjiCobaPage() {
     setLoading(true);
 
     setTimeout(() => {
-      let botResponse = "Maaf Kak, informasi mengenai hal tersebut belum tercatat di data kami. Segera saya hubungkan dengan admin ya!";
-      let source = "Fallback / Eskalasi CS";
-      let confidence = 0.45;
+      let botResponse = "Maaf, saya belum menemukan jawaban dari dokumen atau FAQ yang tersedia. Chat ini akan dialihkan ke admin.";
+      let source = "Fallback / Belum Ada Data";
+      let confidence = 0.4;
 
       const lower = userText.toLowerCase();
 
       if (kanal === "iklan") {
-        const matchedAd = adTemplates.find((t) =>
+        const matchedAd = ads.find((t: any) =>
           t.mode === "exact"
             ? lower === t.pertanyaan.toLowerCase()
             : lower.includes(t.pertanyaan.toLowerCase()) || t.pertanyaan.toLowerCase().includes(lower),
@@ -90,23 +87,17 @@ export function UjiCobaPage() {
           confidence = 0.98;
         }
       } else {
-        const matchedFaq = faqItems.find((f) =>
-          lower.includes("ongkir") || lower.includes("kirim") || lower.includes("pengiriman")
-            ? f.pertanyaan.includes("pengiriman")
-            : lower.includes("cod") || lower.includes("tempat") || lower.includes("bayar")
-              ? f.pertanyaan.includes("tempat")
-              : lower.includes("jam") || lower.includes("buka") || lower.includes("operasional")
-                ? f.pertanyaan.includes("operasional")
-                : false,
+        const matchedFaq = faqs.find((f: any) =>
+          lower.includes(f.pertanyaan.toLowerCase()) || f.pertanyaan.toLowerCase().includes(lower),
         );
 
         if (matchedFaq) {
           botResponse = matchedFaq.jawaban;
-          source = `Basis Pengetahuan FAQ: "${matchedFaq.pertanyaan}"`;
-          confidence = 0.94;
-        } else if (lower.includes("halo") || lower.includes("hai") || lower.includes("pagi") || lower.includes("siang") || lower.includes("sore") || lower.includes("malam")) {
-          botResponse = "Halo Kak! Ada buket bunga atau pesanan khusus yang bisa kami bantu hari ini? 🌸";
-          source = "Instruksi Sapaan Pembuka";
+          source = `FAQ: "${matchedFaq.pertanyaan}"`;
+          confidence = 0.95;
+        } else if (lower.includes("halo") || lower.includes("hai") || lower.includes("pagi") || lower.includes("siang") || lower.includes("malam")) {
+          botResponse = "Halo! Ada yang bisa kami bantu hari ini?";
+          source = "Sapaan Otomatis";
           confidence = 0.99;
         }
       }
@@ -122,12 +113,12 @@ export function UjiCobaPage() {
 
       setMessages((prev) => [...prev, botMsg]);
       setLoading(false);
-    }, 600);
+    }, 500);
   };
 
   const resetChat = () => {
-    setMessages(initialMessages);
-    toast.info("Percakapan uji coba direset.");
+    setMessages([]);
+    toast.info("Percakapan uji coba dibersihkan.");
   };
 
   return (
@@ -136,8 +127,8 @@ export function UjiCobaPage() {
         title="Uji Coba Bot"
         description="Simulasikan percakapan pelanggan untuk memastikan respons AI dan template jawaban sudah akurat."
         action={
-          <Button variant="outline" size="sm" onClick={resetChat}>
-            <RotateCcw className="size-3.5" /> Reset Obrolan
+          <Button variant="outline" size="sm" onClick={resetChat} disabled={messages.length === 0}>
+            <RotateCcw className="size-3.5" /> Bersihkan Obrolan
           </Button>
         }
       />
@@ -182,9 +173,9 @@ export function UjiCobaPage() {
             <div className="flex items-center gap-1.5 font-medium text-foreground">
               <Sparkles className="size-3.5 text-primary" /> Info Pengetahuan Aktif
             </div>
-            <p>• 4 Dokumen terindeks</p>
-            <p>• 3 FAQ Manual siap pakai</p>
-            <p>• 4 Template Balas Iklan</p>
+            <p>• {docs.length} Dokumen terindeks</p>
+            <p>• {faqs.length} FAQ Manual</p>
+            <p>• {ads.length} Template Balas Iklan</p>
           </div>
         </div>
 
@@ -195,57 +186,67 @@ export function UjiCobaPage() {
                 <Bot className="size-4" />
               </span>
               <div>
-                <p className="text-xs font-semibold">Mela (Bot Toko Bunga Melati)</p>
-                <p className="text-[10px] text-muted-foreground">Status: Online · Simulasi Aktif</p>
+                <p className="text-xs font-semibold">Bot Asisten</p>
+                <p className="text-[10px] text-muted-foreground">Status: Siap Uji Coba</p>
               </div>
             </div>
           </div>
 
           <div className="flex-1 space-y-4 overflow-y-auto p-5">
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className={`flex gap-3 ${m.sender === "user" ? "justify-end" : "justify-start"}`}
-              >
-                {m.sender === "bot" && (
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Bot className="size-3.5" />
-                  </span>
-                )}
-
+            {messages.length === 0 ? (
+              <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground">
+                <Bot className="size-10 opacity-30 mb-2" />
+                <p className="text-sm font-medium">Mulai Percakapan Simulasi</p>
+                <p className="text-xs max-w-xs mt-1">
+                  Kirim pesan di bawah untuk menguji respons bot berdasarkan basis pengetahuan Anda.
+                </p>
+              </div>
+            ) : (
+              messages.map((m) => (
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
-                    m.sender === "user"
-                      ? "bg-primary text-primary-foreground rounded-tr-none"
-                      : "bg-secondary text-foreground rounded-tl-none border border-border"
-                  }`}
+                  key={m.id}
+                  className={`flex gap-3 ${m.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <p>{m.text}</p>
-                  <div className="mt-1 flex items-center justify-between gap-3 text-[10px] opacity-70">
-                    <span>{m.time}</span>
-                    {m.confidence !== undefined && (
-                      <span>Keyakinan: {Math.round(m.confidence * 100)}%</span>
+                  {m.sender === "bot" && (
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Bot className="size-3.5" />
+                    </span>
+                  )}
+
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
+                      m.sender === "user"
+                        ? "bg-primary text-primary-foreground rounded-tr-none"
+                        : "bg-secondary text-foreground rounded-tl-none border border-border"
+                    }`}
+                  >
+                    <p>{m.text}</p>
+                    <div className="mt-1 flex items-center justify-between gap-3 text-[10px] opacity-70">
+                      <span>{m.time}</span>
+                      {m.confidence !== undefined && (
+                        <span>Keyakinan: {Math.round(m.confidence * 100)}%</span>
+                      )}
+                    </div>
+                    {m.source && (
+                      <div className="mt-1.5 border-t border-border/40 pt-1 text-[10px] text-primary">
+                        Sumber: {m.source}
+                      </div>
                     )}
                   </div>
-                  {m.source && (
-                    <div className="mt-1.5 border-t border-border/40 pt-1 text-[10px] text-primary">
-                      Sumber: {m.source}
-                    </div>
+
+                  {m.sender === "user" && (
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground">
+                      <User className="size-3.5" />
+                    </span>
                   )}
                 </div>
-
-                {m.sender === "user" && (
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground">
-                    <User className="size-3.5" />
-                  </span>
-                )}
-              </div>
-            ))}
+              ))
+            )}
 
             {loading && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Bot className="size-3.5 animate-spin text-primary" />
-                <span>Mela sedang mengetik jawaban...</span>
+                <span>Bot sedang memproses jawaban...</span>
               </div>
             )}
           </div>
@@ -261,7 +262,7 @@ export function UjiCobaPage() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ketik pesan simulasi (contoh: Apakah bisa bayar COD?)..."
+                placeholder="Ketik pesan simulasi..."
                 disabled={loading}
               />
               <Button type="submit" disabled={loading || !input.trim()}>

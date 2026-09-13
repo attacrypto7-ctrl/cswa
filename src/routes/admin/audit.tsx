@@ -38,6 +38,11 @@ function AuditPage() {
             <span className="font-mono text-xs text-muted-foreground">{e.waktu}</span>
           </li>
         ))}
+        {entries.length === 0 && (
+          <li className="py-10 text-center text-sm text-muted-foreground">
+            Belum ada catatan aktivitas admin.
+          </li>
+        )}
       </ol>
     </>
   );

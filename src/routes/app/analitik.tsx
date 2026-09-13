@@ -39,7 +39,11 @@ export function AnalitikPage() {
 
   const totalChatMingguan = chatHarian.reduce((a, c) => a + c.chat, 0);
   const totalGagalMingguan = chatHarian.reduce((a, c) => a + c.gagal, 0);
-  const suksesPersen = totalChatMingguan > 0 ? Math.round(((totalChatMingguan - totalGagalMingguan) / totalChatMingguan) * 100) : 94;
+  const totalToken = pemakaianToken.reduce((a, c) => a + c.token, 0);
+  const suksesPersen =
+    totalChatMingguan > 0
+      ? Math.round(((totalChatMingguan - totalGagalMingguan) / totalChatMingguan) * 100)
+      : 0;
   const maxPertanyaan = pertanyaanTeratas[0]?.jumlah || 1;
 
   return (
@@ -54,20 +58,20 @@ export function AnalitikPage() {
           label="Total Chat Minggu Ini"
           value={formatNumber(totalChatMingguan)}
           icon={MessagesSquare}
-          hint="+14% vs minggu lalu"
+          hint="Volume chat masuk"
         />
         <StatCard
           label="Tingkat Balas Otomatis"
-          value={`${suksesPersen}%`}
+          value={totalChatMingguan > 0 ? `${suksesPersen}%` : "-"}
           icon={TrendingUp}
           tone="success"
           hint="Dijawab tuntas oleh bot"
         />
         <StatCard
-          label="Pemakaian Token (Sep)"
-          value="9.3 Juta"
+          label="Pemakaian Token"
+          value={totalToken > 0 ? `${totalToken.toFixed(1)} Juta` : "0"}
           icon={Coins}
-          hint="Sesuai batas paket"
+          hint="Penggunaan model AI"
         />
         <StatCard
           label="Topik Pertanyaan"
@@ -83,85 +87,103 @@ export function AnalitikPage() {
             <h2 className="text-sm font-semibold">Volume Chat 7 Hari Terakhir</h2>
             <p className="text-xs text-muted-foreground">Jumlah chat dijawab bot vs dialihkan ke admin</p>
           </div>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chatHarian}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                <XAxis dataKey="hari" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                  }}
-                />
-                <Bar dataKey="chat" name="Chat Berhasil" fill="#10b981" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="gagal" name="Perlu Manusia" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          {chatHarian.length > 0 ? (
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chatHarian}>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                  <XAxis dataKey="hari" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                    }}
+                  />
+                  <Bar dataKey="chat" name="Chat Berhasil" fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="gagal" name="Perlu Manusia" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex h-72 items-center justify-center text-sm text-muted-foreground">
+              Belum ada data aktivitas chat.
+            </div>
+          )}
         </div>
 
         <div className="panel p-5">
           <div className="mb-4">
             <h2 className="text-sm font-semibold">Tren Pemakaian Token (Juta Token)</h2>
-            <p className="text-xs text-muted-foreground">Akumulasi pemakaian model AI 6 bulan terakhir</p>
+            <p className="text-xs text-muted-foreground">Akumulasi pemakaian model AI</p>
           </div>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={pemakaianToken}>
-                <defs>
-                  <linearGradient id="colorToken" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                <XAxis dataKey="bulan" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    borderColor: "hsl(var(--border))",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="token"
-                  name="Token (Juta)"
-                  stroke="#0ea5e9"
-                  fillOpacity={1}
-                  fill="url(#colorToken)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          {pemakaianToken.length > 0 ? (
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={pemakaianToken}>
+                  <defs>
+                    <linearGradient id="colorToken" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                  <XAxis dataKey="bulan" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      borderColor: "hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="token"
+                    name="Token (Juta)"
+                    stroke="#0ea5e9"
+                    fillOpacity={1}
+                    fill="url(#colorToken)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex h-72 items-center justify-center text-sm text-muted-foreground">
+              Belum ada riwayat penggunaan token.
+            </div>
+          )}
         </div>
       </div>
 
       <div className="panel mt-6 p-5">
-        <h2 className="text-sm font-semibold">5 Pertanyaan Paling Sering Diajukan</h2>
+        <h2 className="text-sm font-semibold">Pertanyaan Paling Sering Diajukan</h2>
         <p className="text-xs text-muted-foreground">
           Bisa digunakan untuk memperkaya data FAQ dan materi promosi.
         </p>
 
-        <div className="mt-5 space-y-4">
-          {pertanyaanTeratas.map((p, index) => (
-            <div key={p.pertanyaan} className="space-y-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-foreground">
-                  {index + 1}. {p.pertanyaan}
-                </span>
-                <span className="text-muted-foreground">{formatNumber(p.jumlah)} kali</span>
+        {pertanyaanTeratas.length > 0 ? (
+          <div className="mt-5 space-y-4">
+            {pertanyaanTeratas.map((p, index) => (
+              <div key={p.pertanyaan} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-medium text-foreground">
+                    {index + 1}. {p.pertanyaan}
+                  </span>
+                  <span className="text-muted-foreground">{formatNumber(p.jumlah)} kali</span>
+                </div>
+                <Progress value={(p.jumlah / maxPertanyaan) * 100} className="h-2" />
               </div>
-              <Progress value={(p.jumlah / maxPertanyaan) * 100} className="h-2" />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 text-sm text-muted-foreground">
+            Belum ada data pertanyaan yang terhimpun.
+          </p>
+        )}
       </div>
     </>
   );

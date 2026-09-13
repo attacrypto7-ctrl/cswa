@@ -32,8 +32,8 @@ export const Route = createFileRoute("/app")({
 function TenantLayout() {
   return (
     <DashboardShell
-      title="Toko Bunga Melati"
-      subtitle="Dashboard tenant"
+      title="Balasin"
+      subtitle="Dashboard Tenant"
       items={items}
       footer={
         <Link to="/admin" className="text-xs text-muted-foreground hover:text-foreground">
