@@ -24,7 +24,10 @@ export const Route = createFileRoute("/app/pengetahuan")({
   head: () => ({
     meta: [
       { title: "Basis Pengetahuan — Dashboard Balasin" },
-      { name: "description", content: "Unggah dokumen dan tulis FAQ yang jadi sumber jawaban bot WhatsApp Anda." },
+      {
+        name: "description",
+        content: "Unggah dokumen dan tulis FAQ yang jadi sumber jawaban bot WhatsApp Anda.",
+      },
       { property: "og:title", content: "Basis Pengetahuan — Dashboard Balasin" },
       { property: "og:description", content: "Unggah dokumen dan tulis FAQ sumber jawaban bot." },
     ],
@@ -65,7 +68,9 @@ function KnowledgePage() {
               <UploadCloud className="size-6" />
             </span>
             <p className="text-sm font-medium">Tarik berkas ke sini atau klik untuk memilih</p>
-            <p className="text-xs text-muted-foreground">PDF atau teks, maksimal 20 MB per berkas</p>
+            <p className="text-xs text-muted-foreground">
+              PDF atau teks, maksimal 20 MB per berkas
+            </p>
             <Button variant="outline" size="sm">
               Pilih berkas
             </Button>
@@ -99,7 +104,11 @@ function KnowledgePage() {
                       <StatusPill
                         label={labelStatusDokumen(d.status)}
                         tone={
-                          d.status === "terindeks" ? "success" : d.status === "memproses" ? "info" : "danger"
+                          d.status === "terindeks"
+                            ? "success"
+                            : d.status === "memproses"
+                              ? "info"
+                              : "danger"
                         }
                       />
                     </TableCell>
@@ -124,7 +133,10 @@ function KnowledgePage() {
                 ))}
                 {docs.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="py-10 text-center text-sm text-muted-foreground">
+                    <TableCell
+                      colSpan={7}
+                      className="py-10 text-center text-sm text-muted-foreground"
+                    >
                       Belum ada dokumen yang diunggah. Unggah file PDF atau berkas teks di atas.
                     </TableCell>
                   </TableRow>

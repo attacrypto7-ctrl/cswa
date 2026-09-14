@@ -39,7 +39,10 @@ export const Route = createFileRoute("/admin/licenses")({
   head: () => ({
     meta: [
       { title: "Lisensi — Balasin Admin" },
-      { name: "description", content: "Buat, tinjau, dan cabut kode lisensi tenant beserta masa berlaku dan kuotanya." },
+      {
+        name: "description",
+        content: "Buat, tinjau, dan cabut kode lisensi tenant beserta masa berlaku dan kuotanya.",
+      },
       { property: "og:title", content: "Lisensi — Balasin Admin" },
       { property: "og:description", content: "Buat dan kelola kode lisensi tenant." },
     ],
@@ -177,7 +180,8 @@ function LicensesPage() {
             {licenses.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} className="py-10 text-center text-sm text-muted-foreground">
-                  Belum ada lisensi yang dibuat. Klik "Buat lisensi" di atas untuk menambahkan lisensi baru.
+                  Belum ada lisensi yang dibuat. Klik "Buat lisensi" di atas untuk menambahkan
+                  lisensi baru.
                 </TableCell>
               </TableRow>
             )}

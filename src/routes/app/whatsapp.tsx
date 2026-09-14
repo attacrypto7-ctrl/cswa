@@ -21,9 +21,15 @@ export const Route = createFileRoute("/app/whatsapp")({
   head: () => ({
     meta: [
       { title: "Koneksi WhatsApp — Dashboard Balasin" },
-      { name: "description", content: "Sambungkan nomor WhatsApp lewat QR code dan pantau statusnya secara langsung." },
+      {
+        name: "description",
+        content: "Sambungkan nomor WhatsApp lewat QR code dan pantau statusnya secara langsung.",
+      },
       { property: "og:title", content: "Koneksi WhatsApp — Dashboard Balasin" },
-      { property: "og:description", content: "Sambungkan nomor WhatsApp lewat QR code dan pantau statusnya." },
+      {
+        property: "og:description",
+        content: "Sambungkan nomor WhatsApp lewat QR code dan pantau statusnya.",
+      },
     ],
   }),
   component: WhatsappPage,
@@ -77,7 +83,9 @@ function WhatsappPage() {
                 <Switch
                   defaultChecked={n.autoChat}
                   onCheckedChange={(v) =>
-                    toast.success(`Balas Chat Otomatis ${v ? "dinyalakan" : "dimatikan"} untuk ${n.label}`)
+                    toast.success(
+                      `Balas Chat Otomatis ${v ? "dinyalakan" : "dimatikan"} untuk ${n.label}`,
+                    )
                   }
                 />
               </label>
@@ -86,7 +94,9 @@ function WhatsappPage() {
                 <Switch
                   defaultChecked={n.autoIklan}
                   onCheckedChange={(v) =>
-                    toast.success(`Balas Iklan Otomatis ${v ? "dinyalakan" : "dimatikan"} untuk ${n.label}`)
+                    toast.success(
+                      `Balas Iklan Otomatis ${v ? "dinyalakan" : "dimatikan"} untuk ${n.label}`,
+                    )
                   }
                 />
               </label>
@@ -96,7 +106,11 @@ function WhatsappPage() {
               <Button size="sm" variant="outline" onClick={() => setQrOpen(true)}>
                 <QrCode className="size-3.5" /> Pindai ulang
               </Button>
-              <Button size="sm" variant="ghost" onClick={() => toast.info("Menyambungkan ulang sesi...")}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => toast.info("Menyambungkan ulang sesi...")}
+              >
                 <RefreshCw className="size-3.5" /> Sambung ulang
               </Button>
               <Button
@@ -113,9 +127,12 @@ function WhatsappPage() {
         {numbers.length === 0 && (
           <div className="panel col-span-full flex flex-col items-center justify-center p-12 text-center">
             <QrCode className="size-10 text-muted-foreground opacity-40 mb-3" />
-            <p className="text-sm font-medium text-foreground">Belum ada nomor WhatsApp tersambung</p>
+            <p className="text-sm font-medium text-foreground">
+              Belum ada nomor WhatsApp tersambung
+            </p>
             <p className="mt-1 text-xs text-muted-foreground max-w-sm">
-              Klik tombol "Tambah nomor" di atas untuk menghubungkan nomor WhatsApp bisnis Anda lewat QR code.
+              Klik tombol "Tambah nomor" di atas untuk menghubungkan nomor WhatsApp bisnis Anda
+              lewat QR code.
             </p>
             <Button className="mt-4" size="sm" onClick={() => setQrOpen(true)}>
               <Plus className="size-4" /> Hubungkan Sekarang

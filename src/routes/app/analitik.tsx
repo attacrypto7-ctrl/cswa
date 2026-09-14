@@ -22,7 +22,10 @@ export const Route = createFileRoute("/app/analitik")({
   head: () => ({
     meta: [
       { title: "Analitik — Dashboard Balasin" },
-      { name: "description", content: "Statistik pesan, efisiensi AI, dan pertanyaan terpopuler dari pelanggan." },
+      {
+        name: "description",
+        content: "Statistik pesan, efisiensi AI, dan pertanyaan terpopuler dari pelanggan.",
+      },
       { property: "og:title", content: "Analitik — Dashboard Balasin" },
       { property: "og:description", content: "Statistik pesan dan efisiensi AI bot." },
     ],
@@ -30,7 +33,7 @@ export const Route = createFileRoute("/app/analitik")({
   component: AnalitikPage,
 });
 
-export function AnalitikPage() {
+function AnalitikPage() {
   const { data } = useQuery({ queryKey: ["analytics"], queryFn: getAnalytics });
 
   const chatHarian = data?.chatHarian ?? [];
@@ -85,7 +88,9 @@ export function AnalitikPage() {
         <div className="panel p-5">
           <div className="mb-4">
             <h2 className="text-sm font-semibold">Volume Chat 7 Hari Terakhir</h2>
-            <p className="text-xs text-muted-foreground">Jumlah chat dijawab bot vs dialihkan ke admin</p>
+            <p className="text-xs text-muted-foreground">
+              Jumlah chat dijawab bot vs dialihkan ke admin
+            </p>
           </div>
           {chatHarian.length > 0 ? (
             <div className="h-72 w-full">

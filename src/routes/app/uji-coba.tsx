@@ -22,7 +22,11 @@ export const Route = createFileRoute("/app/uji-coba")({
   head: () => ({
     meta: [
       { title: "Uji Coba Bot — Dashboard Balasin" },
-      { name: "description", content: "Simulasi percakapan dengan bot AI Anda sebelum dihubungkan ke WhatsApp pelanggan asli." },
+      {
+        name: "description",
+        content:
+          "Simulasi percakapan dengan bot AI Anda sebelum dihubungkan ke WhatsApp pelanggan asli.",
+      },
       { property: "og:title", content: "Uji Coba Bot — Dashboard Balasin" },
       { property: "og:description", content: "Simulasi percakapan bot AI." },
     ],
@@ -39,7 +43,7 @@ interface Message {
   time: string;
 }
 
-export function UjiCobaPage() {
+function UjiCobaPage() {
   const { data: docs = [] } = useQuery({ queryKey: ["docs"], queryFn: getKnowledgeDocs });
   const { data: faqs = [] } = useQuery({ queryKey: ["faqs"], queryFn: getFaqItems });
   const { data: ads = [] } = useQuery({ queryKey: ["ads"], queryFn: getAdTemplates });
@@ -68,7 +72,8 @@ export function UjiCobaPage() {
     setLoading(true);
 
     setTimeout(() => {
-      let botResponse = "Maaf, saya belum menemukan jawaban dari dokumen atau FAQ yang tersedia. Chat ini akan dialihkan ke admin.";
+      let botResponse =
+        "Maaf, saya belum menemukan jawaban dari dokumen atau FAQ yang tersedia. Chat ini akan dialihkan ke admin.";
       let source = "Fallback / Belum Ada Data";
       let confidence = 0.4;
 
@@ -78,7 +83,8 @@ export function UjiCobaPage() {
         const matchedAd = ads.find((t: any) =>
           t.mode === "exact"
             ? lower === t.pertanyaan.toLowerCase()
-            : lower.includes(t.pertanyaan.toLowerCase()) || t.pertanyaan.toLowerCase().includes(lower),
+            : lower.includes(t.pertanyaan.toLowerCase()) ||
+              t.pertanyaan.toLowerCase().includes(lower),
         );
 
         if (matchedAd) {
@@ -87,15 +93,23 @@ export function UjiCobaPage() {
           confidence = 0.98;
         }
       } else {
-        const matchedFaq = faqs.find((f: any) =>
-          lower.includes(f.pertanyaan.toLowerCase()) || f.pertanyaan.toLowerCase().includes(lower),
+        const matchedFaq = faqs.find(
+          (f: any) =>
+            lower.includes(f.pertanyaan.toLowerCase()) ||
+            f.pertanyaan.toLowerCase().includes(lower),
         );
 
         if (matchedFaq) {
           botResponse = matchedFaq.jawaban;
           source = `FAQ: "${matchedFaq.pertanyaan}"`;
           confidence = 0.95;
-        } else if (lower.includes("halo") || lower.includes("hai") || lower.includes("pagi") || lower.includes("siang") || lower.includes("malam")) {
+        } else if (
+          lower.includes("halo") ||
+          lower.includes("hai") ||
+          lower.includes("pagi") ||
+          lower.includes("siang") ||
+          lower.includes("malam")
+        ) {
           botResponse = "Halo! Ada yang bisa kami bantu hari ini?";
           source = "Sapaan Otomatis";
           confidence = 0.99;

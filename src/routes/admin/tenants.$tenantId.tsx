@@ -13,21 +13,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  formatDate,
-  formatNumber,
-  getLicensesByTenant,
-  getTenant,
-  getWaNumbers,
-} from "@/mock/api";
+import { formatDate, formatNumber, getLicensesByTenant, getTenant, getWaNumbers } from "@/mock/api";
 
 export const Route = createFileRoute("/admin/tenants/$tenantId")({
   head: () => ({
     meta: [
       { title: "Detail Tenant — Balasin Admin" },
-      { name: "description", content: "Rincian nomor WhatsApp, pemakaian token, dan riwayat lisensi tenant." },
+      {
+        name: "description",
+        content: "Rincian nomor WhatsApp, pemakaian token, dan riwayat lisensi tenant.",
+      },
       { property: "og:title", content: "Detail Tenant — Balasin Admin" },
-      { property: "og:description", content: "Rincian nomor WhatsApp, pemakaian, dan lisensi tenant." },
+      {
+        property: "og:description",
+        content: "Rincian nomor WhatsApp, pemakaian, dan lisensi tenant.",
+      },
     ],
   }),
   component: TenantDetail,
@@ -61,7 +61,12 @@ function TenantDetail() {
       <PageHeader
         title={tenant.nama}
         description={`${tenant.industri} · ${tenant.email} · bergabung ${formatDate(tenant.bergabung)}`}
-        action={<StatusPill label={tenant.status} tone={tenant.status === "aktif" ? "success" : "danger"} />}
+        action={
+          <StatusPill
+            label={tenant.status}
+            tone={tenant.status === "aktif" ? "success" : "danger"}
+          />
+        }
       />
 
       <div className="grid gap-4 sm:grid-cols-3">

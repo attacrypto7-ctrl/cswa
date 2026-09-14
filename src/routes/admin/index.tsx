@@ -50,7 +50,12 @@ function AdminOverview() {
           icon={Building2}
           hint={suspendedCount > 0 ? `${suspendedCount} tenant ditangguhkan` : "Semua aktif"}
         />
-        <StatCard label="Lisensi aktif" value={String(aktif.length)} icon={KeyRound} tone="success" />
+        <StatCard
+          label="Lisensi aktif"
+          value={String(aktif.length)}
+          icon={KeyRound}
+          tone="success"
+        />
         <StatCard
           label="Segera kedaluwarsa"
           value={String(segera.length)}
@@ -93,9 +98,13 @@ function AdminOverview() {
                 return (
                   <TableRow key={l.id}>
                     <TableCell className="font-medium">{l.tenantNama}</TableCell>
-                    <TableCell className="font-mono text-xs text-muted-foreground">{l.kode}</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">
+                      {l.kode}
+                    </TableCell>
                     <TableCell>{formatDate(l.berakhir)}</TableCell>
-                    <TableCell className={sisa < 0 ? "text-destructive" : sisa <= 30 ? "text-warning" : ""}>
+                    <TableCell
+                      className={sisa < 0 ? "text-destructive" : sisa <= 30 ? "text-warning" : ""}
+                    >
                       {sisa < 0 ? `${Math.abs(sisa)} hari lewat` : `${sisa} hari`}
                     </TableCell>
                     <TableCell>

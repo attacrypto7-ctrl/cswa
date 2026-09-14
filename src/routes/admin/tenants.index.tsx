@@ -78,7 +78,9 @@ function TenantsPage() {
                   >
                     {t.nama}
                   </Link>
-                  <p className="text-xs text-muted-foreground">{t.industri} · {t.email}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.industri} · {t.email}
+                  </p>
                 </TableCell>
                 <TableCell>{t.plan}</TableCell>
                 <TableCell>{t.nomorWa}</TableCell>
@@ -90,10 +92,7 @@ function TenantsPage() {
                 </TableCell>
                 <TableCell>{formatDate(t.lisensiBerakhir)}</TableCell>
                 <TableCell>
-                  <StatusPill
-                    label={t.status}
-                    tone={t.status === "aktif" ? "success" : "danger"}
-                  />
+                  <StatusPill label={t.status} tone={t.status === "aktif" ? "success" : "danger"} />
                 </TableCell>
               </TableRow>
             ))}

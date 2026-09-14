@@ -23,16 +23,27 @@ import { Textarea } from "@/components/ui/textarea";
 const tingkatAi = [
   { id: "hemat", nama: "Hemat", catatan: "Cepat & murah, cocok untuk chat sehari-hari" },
   { id: "seimbang", nama: "Seimbang", catatan: "Lebih pintar, biaya sedang" },
-  { id: "akurat", nama: "Paling Akurat", catatan: "Paling teliti, untuk jawaban yang harus presisi" },
+  {
+    id: "akurat",
+    nama: "Paling Akurat",
+    catatan: "Paling teliti, untuk jawaban yang harus presisi",
+  },
 ];
 
 export const Route = createFileRoute("/app/balas-chat")({
   head: () => ({
     meta: [
       { title: "Balas Chat Otomatis — Dashboard Balasin" },
-      { name: "description", content: "Atur gaya bahasa, mesin AI, dan ambang alih ke manusia untuk balasan chat otomatis." },
+      {
+        name: "description",
+        content:
+          "Atur gaya bahasa, mesin AI, dan ambang alih ke manusia untuk balasan chat otomatis.",
+      },
       { property: "og:title", content: "Balas Chat Otomatis — Dashboard Balasin" },
-      { property: "og:description", content: "Atur gaya bahasa dan mesin AI untuk balasan chat otomatis." },
+      {
+        property: "og:description",
+        content: "Atur gaya bahasa dan mesin AI untuk balasan chat otomatis.",
+      },
     ],
   }),
   component: AutoChatPage,

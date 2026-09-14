@@ -28,13 +28,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { daysLeft, formatDate, formatNumber, getChatLogs, getLicenses, getWaNumbers } from "@/mock/api";
+import {
+  daysLeft,
+  formatDate,
+  formatNumber,
+  getChatLogs,
+  getLicenses,
+  getWaNumbers,
+} from "@/mock/api";
 
 export const Route = createFileRoute("/app/lisensi")({
   head: () => ({
     meta: [
       { title: "Lisensi Tenant — Dashboard Balasin" },
-      { name: "description", content: "Informasi masa berlaku paket, kuota chat, dan status aktivasi lisensi Anda." },
+      {
+        name: "description",
+        content: "Informasi masa berlaku paket, kuota chat, dan status aktivasi lisensi Anda.",
+      },
       { property: "og:title", content: "Lisensi Tenant — Dashboard Balasin" },
       { property: "og:description", content: "Informasi lisensi dan kuota bot WhatsApp." },
     ],
@@ -42,7 +52,7 @@ export const Route = createFileRoute("/app/lisensi")({
   component: LisensiPage,
 });
 
-export function LisensiPage() {
+function LisensiPage() {
   const { data: licenses = [] } = useQuery({ queryKey: ["licenses"], queryFn: getLicenses });
   const { data: logs = [] } = useQuery({ queryKey: ["chats"], queryFn: getChatLogs });
   const { data: waList = [] } = useQuery({ queryKey: ["wa"], queryFn: getWaNumbers });
@@ -55,7 +65,8 @@ export function LisensiPage() {
   const sisaHari = activeLicense ? daysLeft(activeLicense.berakhir) : 0;
   const chatTerpakai = logs.length;
   const kuotaChat = activeLicense?.kuotaChat ?? 0;
-  const persenKuota = kuotaChat > 0 ? Math.min(100, Math.round((chatTerpakai / kuotaChat) * 100)) : 0;
+  const persenKuota =
+    kuotaChat > 0 ? Math.min(100, Math.round((chatTerpakai / kuotaChat) * 100)) : 0;
 
   const copyLicense = () => {
     if (activeLicense) {
@@ -92,7 +103,8 @@ export function LisensiPage() {
               <DialogHeader>
                 <DialogTitle>Aktivasi / Perpanjang Lisensi</DialogTitle>
                 <DialogDescription>
-                  Masukkan kode lisensi resmi yang Anda dapatkan dari tim Balasin atau penyedia layanan.
+                  Masukkan kode lisensi resmi yang Anda dapatkan dari tim Balasin atau penyedia
+                  layanan.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-3 py-2">
@@ -137,7 +149,9 @@ export function LisensiPage() {
           label="Kuota Chat Terpakai"
           value={kuotaChat > 0 ? `${persenKuota}%` : "0%"}
           icon={MessageSquare}
-          hint={kuotaChat > 0 ? `${formatNumber(chatTerpakai)} / ${formatNumber(kuotaChat)}` : "0 kuota"}
+          hint={
+            kuotaChat > 0 ? `${formatNumber(chatTerpakai)} / ${formatNumber(kuotaChat)}` : "0 kuota"
+          }
         />
         <StatCard
           label="Nomor WA Aktif"
@@ -175,12 +189,16 @@ export function LisensiPage() {
 
               <div className="flex justify-between border-b border-border pb-3">
                 <span className="text-muted-foreground">Tanggal Aktivasi:</span>
-                <span className="font-medium text-foreground">{formatDate(activeLicense.dibuat)}</span>
+                <span className="font-medium text-foreground">
+                  {formatDate(activeLicense.dibuat)}
+                </span>
               </div>
 
               <div className="flex justify-between border-b border-border pb-3">
                 <span className="text-muted-foreground">Berlaku Sampai:</span>
-                <span className="font-medium text-foreground">{formatDate(activeLicense.berakhir)}</span>
+                <span className="font-medium text-foreground">
+                  {formatDate(activeLicense.berakhir)}
+                </span>
               </div>
 
               <div className="flex justify-between">
@@ -236,7 +254,8 @@ export function LisensiPage() {
           <KeyRound className="size-12 text-muted-foreground opacity-30 mb-3" />
           <h2 className="text-base font-semibold">Belum Ada Lisensi Aktif</h2>
           <p className="mt-1 text-xs text-muted-foreground max-w-sm">
-            Silakan masukkan kode lisensi yang Anda peroleh dari tim Balasin untuk mengaktifkan fitur bot WhatsApp.
+            Silakan masukkan kode lisensi yang Anda peroleh dari tim Balasin untuk mengaktifkan
+            fitur bot WhatsApp.
           </p>
           <Button className="mt-4" onClick={() => setDialogOpen(true)}>
             <KeyRound className="size-4" /> Masukkan Kode Lisensi

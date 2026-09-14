@@ -13,7 +13,10 @@ export const Route = createFileRoute("/app/")({
   head: () => ({
     meta: [
       { title: "Ringkasan Bot — Dashboard Balasin" },
-      { name: "description", content: "Status bot WhatsApp, sisa lisensi, dan chat yang perlu ditangani manusia." },
+      {
+        name: "description",
+        content: "Status bot WhatsApp, sisa lisensi, dan chat yang perlu ditangani manusia.",
+      },
       { property: "og:title", content: "Ringkasan Bot — Dashboard Balasin" },
       { property: "og:description", content: "Status bot WhatsApp dan chat yang perlu ditangani." },
     ],
@@ -52,7 +55,12 @@ function TenantOverview() {
           icon={Smartphone}
           tone="success"
         />
-        <StatCard label="Chat hari ini" value={formatNumber(totalChat)} icon={MessagesSquare} hint="Total chat masuk" />
+        <StatCard
+          label="Chat hari ini"
+          value={formatNumber(totalChat)}
+          icon={MessagesSquare}
+          hint="Total chat masuk"
+        />
         <StatCard
           label="Perlu ditangani manusia"
           value={String(perluManusia)}

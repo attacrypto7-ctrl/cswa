@@ -38,7 +38,10 @@ export const Route = createFileRoute("/app/percakapan")({
   head: () => ({
     meta: [
       { title: "Riwayat Chat — Dashboard Balasin" },
-      { name: "description", content: "Pantau percakapan bot dengan pelanggan dan ambil alih jika diperlukan." },
+      {
+        name: "description",
+        content: "Pantau percakapan bot dengan pelanggan dan ambil alih jika diperlukan.",
+      },
       { property: "og:title", content: "Riwayat Chat — Dashboard Balasin" },
       { property: "og:description", content: "Pantau log percakapan WhatsApp pelanggan." },
     ],
@@ -63,7 +66,8 @@ function PercakapanPage() {
     const matchQuery = `${log.kontak} ${log.nomor} ${log.pesanTerakhir} ${log.balasan}`
       .toLowerCase()
       .includes(q.toLowerCase());
-    const matchKanal = filterKanal === "semua" || log.kanal.toLowerCase() === filterKanal.toLowerCase();
+    const matchKanal =
+      filterKanal === "semua" || log.kanal.toLowerCase() === filterKanal.toLowerCase();
     const matchStatus = filterStatus === "semua" || log.status === filterStatus;
     return matchQuery && matchKanal && matchStatus;
   });

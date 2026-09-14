@@ -33,9 +33,16 @@ export const Route = createFileRoute("/app/balas-iklan")({
   head: () => ({
     meta: [
       { title: "Balas Iklan Otomatis — Dashboard Balasin" },
-      { name: "description", content: "Atur pertanyaan dari iklan Facebook dan rangkaian balasan (teks & gambar) yang dikirim persis sama tiap kali." },
+      {
+        name: "description",
+        content:
+          "Atur pertanyaan dari iklan Facebook dan rangkaian balasan (teks & gambar) yang dikirim persis sama tiap kali.",
+      },
       { property: "og:title", content: "Balas Iklan Otomatis — Dashboard Balasin" },
-      { property: "og:description", content: "Rangkaian balasan teks & gambar untuk chat dari iklan." },
+      {
+        property: "og:description",
+        content: "Rangkaian balasan teks & gambar untuk chat dari iklan.",
+      },
     ],
   }),
   component: AutoAdsPage,
@@ -63,9 +70,19 @@ export const Route = createFileRoute("/app/balas-iklan")({
 // & backend dipindah ke bentuk baru ini.
 // -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 type Langkah =
   | { id: string; tipe: "teks"; isiTeks: string }
   | { id: string; tipe: "gambar"; urlGambar?: string; namaGambar?: string | undefined };
+=======
+type Langkah = {
+  id: string;
+  tipe: "teks" | "gambar";
+  isiTeks?: string;
+  urlGambar?: string;
+  namaGambar?: string | undefined;
+};
+>>>>>>> f3af05c (debug error, desain UI, dan alur kerja)
 
 function buatId() {
   return Math.random().toString(36).slice(2, 10);
@@ -95,7 +112,9 @@ function AutoAdsPage() {
 
   // --- state untuk form "Tambah template" ---
   const [pertanyaan, setPertanyaan] = useState("");
-  const [caraMencocokkan, setCaraMencocokkan] = useState<"sama_persis" | "boleh_mirip">("boleh_mirip");
+  const [caraMencocokkan, setCaraMencocokkan] = useState<"sama_persis" | "boleh_mirip">(
+    "boleh_mirip",
+  );
   const [langkahBaru, setLangkahBaru] = useState<Langkah[]>([
     { id: buatId(), tipe: "teks", isiTeks: "" },
   ]);
@@ -215,7 +234,10 @@ function AutoAdsPage() {
               ))}
               {templates.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-10 text-center text-sm text-muted-foreground">
+                  <TableCell
+                    colSpan={5}
+                    className="py-10 text-center text-sm text-muted-foreground"
+                  >
                     Belum ada template balasan iklan. Buat template baru lewat formulir di samping.
                   </TableCell>
                 </TableRow>
@@ -247,7 +269,10 @@ function AutoAdsPage() {
 
             <div className="grid gap-2">
               <Label>Cara mencocokkan pertanyaan</Label>
-              <Select value={caraMencocokkan} onValueChange={(v: "sama_persis" | "boleh_mirip") => setCaraMencocokkan(v)}>
+              <Select
+                value={caraMencocokkan}
+                onValueChange={(v: "sama_persis" | "boleh_mirip") => setCaraMencocokkan(v)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -262,7 +287,10 @@ function AutoAdsPage() {
               <Label>Balasan (dikirim berurutan, boleh lebih dari satu)</Label>
 
               {langkahBaru.map((l, i) => (
-                <div key={l.id} className="flex items-start gap-2 rounded-lg border border-border bg-secondary/40 p-3">
+                <div
+                  key={l.id}
+                  className="flex items-start gap-2 rounded-lg border border-border bg-secondary/40 p-3"
+                >
                   <GripVertical className="mt-2 size-4 shrink-0 text-muted-foreground" />
                   <div className="flex-1 space-y-1">
                     <p className="text-xs font-medium text-muted-foreground">Pesan ke-{i + 1}</p>

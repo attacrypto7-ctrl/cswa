@@ -34,6 +34,7 @@ export const getTenant = (id: string) => {
 };
 export const getLicenses = () => apiFetch<AnyRecord[]>("/admin/licenses");
 export const getLicensesByTenant = (tenantId: string) =>
+<<<<<<< HEAD
   isLoggedIn() ? apiFetch<AnyRecord[]>(`/admin/licenses?tenantId=${tenantId}`) : delay(licenses.filter((l) => l.tenantId === tenantId));
 export const getWaNumbers = () => {
   if (isLoggedIn()) return apiFetch<AnyRecord[]>("/whatsapp/numbers");
@@ -63,6 +64,17 @@ export const getAnalytics = () => {
   if (isLoggedIn()) return apiFetch<AnyRecord>("/analytics/overview");
   return delay({ chatHarian, pemakaianToken, pertanyaanTeratas });
 };
+=======
+  delay(licenses.filter((l) => l.tenantId === tenantId));
+export const getWaNumbers = () => delay(waNumbers);
+export const getKnowledgeDocs = () => delay(knowledgeDocs);
+export const getFaqItems = () => delay(faqItems);
+export const getAdTemplates = () => delay(adTemplates);
+export const getChatLogs = () => delay(chatLogs);
+export const getAuditLog = () => delay(auditLog);
+export const getAnalytics = () => delay({ chatHarian, pemakaianToken, pertanyaanTeratas });
+
+>>>>>>> f3af05c (debug error, desain UI, dan alur kerja)
 export const formatNumber = (n: number) => new Intl.NumberFormat("id-ID").format(n);
 export const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });

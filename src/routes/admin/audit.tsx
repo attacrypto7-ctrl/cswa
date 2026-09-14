@@ -8,7 +8,11 @@ export const Route = createFileRoute("/admin/audit")({
   head: () => ({
     meta: [
       { title: "Catatan Aktivitas — Balasin Admin" },
-      { name: "description", content: "Riwayat tindakan admin: pembuatan lisensi, pencabutan, dan perubahan masa berlaku." },
+      {
+        name: "description",
+        content:
+          "Riwayat tindakan admin: pembuatan lisensi, pencabutan, dan perubahan masa berlaku.",
+      },
       { property: "og:title", content: "Catatan Aktivitas — Balasin Admin" },
       { property: "og:description", content: "Riwayat tindakan admin pada lisensi dan tenant." },
     ],

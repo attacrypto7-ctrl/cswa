@@ -1,6 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-import { Bot } from "lucide-react";
+import { Bot, Home, LogOut } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -16,15 +16,27 @@ interface ShellProps {
   subtitle: string;
   items: NavItem[];
   footer?: ReactNode;
+  onLogout?: () => void;
+  onBackToHome?: () => void;
 }
 
-export function DashboardShell({ title, subtitle, items, footer }: ShellProps) {
+export function DashboardShell({
+  title,
+  subtitle,
+  items,
+  footer,
+  onLogout,
+  onBackToHome,
+}: ShellProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <div className="flex min-h-screen bg-background">
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar px-4 py-6 md:flex">
-        <Link to="/" className="mb-8 flex items-center gap-3 px-2">
+        <Link
+          to="/"
+          className="mb-8 flex cursor-pointer items-center gap-3 px-2 transition-opacity hover:opacity-80"
+        >
           <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Bot className="size-5" />
           </span>
@@ -37,7 +49,8 @@ export function DashboardShell({ title, subtitle, items, footer }: ShellProps) {
         <nav className="flex flex-1 flex-col gap-1">
           {items.map((item) => {
             const active =
-              pathname === item.to || (item.to !== "/admin" && item.to !== "/app" && pathname.startsWith(item.to));
+              pathname === item.to ||
+              (item.to !== "/admin" && item.to !== "/app" && pathname.startsWith(item.to));
             return (
               <Link
                 key={item.to}
@@ -56,7 +69,38 @@ export function DashboardShell({ title, subtitle, items, footer }: ShellProps) {
           })}
         </nav>
 
-        {footer ? <div className="mt-6 border-t border-sidebar-border pt-4">{footer}</div> : null}
+        <div className="mt-auto flex flex-col gap-2.5 pt-4">
+          <Link
+            to="/"
+            onClick={onBackToHome}
+            className="group flex w-full items-center justify-between rounded-xl border border-sky-500/30 bg-sky-950/30 px-3 py-2.5 text-xs font-semibold text-sky-200 transition-all duration-300 hover:translate-y-[-2px] hover:border-sky-400/80 hover:bg-sky-900/40 hover:shadow-[0_0_18px_rgba(56,189,248,0.35)]"
+          >
+            <span className="flex items-center gap-2.5">
+              <Home className="size-4 text-sky-400 transition-transform duration-300 ease-out group-hover:-translate-x-1" />
+              <span>Kembali ke beranda</span>
+            </span>
+            <span className="text-sky-400/60 transition-transform duration-300 ease-out group-hover:-translate-x-1">
+              ←
+            </span>
+          </Link>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="group flex w-full cursor-pointer items-center justify-between rounded-xl border border-rose-500/30 bg-rose-950/30 px-3 py-2.5 text-xs font-semibold text-rose-200 transition-all duration-300 hover:translate-y-[-2px] hover:border-rose-400/80 hover:bg-rose-900/40 hover:shadow-[0_0_18px_rgba(244,63,94,0.35)]"
+            >
+              <span className="flex items-center gap-2.5">
+                <LogOut className="size-4 text-rose-400 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+                <span>Keluar</span>
+              </span>
+              <span className="text-rose-400/60 transition-transform duration-300 ease-out group-hover:translate-x-1">
+                →
+              </span>
+            </button>
+          )}
+
+          {footer ? <div className="border-t border-sidebar-border pt-2.5">{footer}</div> : null}
+        </div>
       </aside>
 
       <div className="min-w-0 flex-1">
