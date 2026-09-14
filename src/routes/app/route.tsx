@@ -10,6 +10,7 @@ import {
   Megaphone,
   Smartphone,
 } from "lucide-react";
+import { logout } from "@/lib/api-client";
 
 import { DashboardShell, type NavItem } from "@/components/dashboard/shell";
 
@@ -36,9 +37,9 @@ function TenantLayout() {
       subtitle="Dashboard Tenant"
       items={items}
       footer={
-        <Link to="/admin" className="text-xs text-muted-foreground hover:text-foreground">
-          Beralih ke dashboard admin →
-        </Link>
+        <button onClick={() => logout()} className="text-xs text-muted-foreground hover:text-foreground">
+          Keluar →
+        </button>
       }
     />
   );

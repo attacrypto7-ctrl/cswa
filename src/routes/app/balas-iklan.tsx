@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { GripVertical, ImagePlus, MessageSquarePlus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-client";
 
 import { PageHeader } from "@/components/dashboard/shell";
 import { StatusPill } from "@/components/dashboard/status-pill";
@@ -64,7 +65,7 @@ export const Route = createFileRoute("/app/balas-iklan")({
 
 type Langkah =
   | { id: string; tipe: "teks"; isiTeks: string }
-  | { id: string; tipe: "gambar"; urlGambar?: string; namaGambar?: string };
+  | { id: string; tipe: "gambar"; urlGambar?: string; namaGambar?: string | undefined };
 
 function buatId() {
   return Math.random().toString(36).slice(2, 10);

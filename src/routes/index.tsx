@@ -1,8 +1,10 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Bot, FileText, MessageSquare, QrCode, ShieldCheck, Zap } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { AmbientBackground } from "@/components/ui/ambient-background";
+import { getToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,6 +59,8 @@ const fitur = [
 ];
 
 function Landing() {
+  const navigate = useNavigate();
+  const isLoggedIn = getToken() !== null;
   return (
     <>
       <AmbientBackground />
@@ -70,10 +74,10 @@ function Landing() {
           </span>
           <div className="flex gap-2">
             <Button asChild variant="ghost" size="sm">
-              <Link to="/admin">Masuk Admin</Link>
+              <a href="/admin">Masuk Admin</a>
             </Button>
             <Button asChild size="sm">
-              <Link to="/app">Dashboard Tenant</Link>
+              <a href="/masuk">{isLoggedIn ? "Dashboard" : "Masuk Tenant"}</a>
             </Button>
           </div>
         </header>
@@ -92,7 +96,7 @@ function Landing() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg">
-              <Link to="/app">Lihat Dashboard Tenant</Link>
+              <a href="/masuk">{isLoggedIn ? "Dashboard Tenant" : "Masuk Tenant"}</a>
             </Button>
             <Button asChild size="lg" variant="outline">
               <Link to="/admin">Lihat Dashboard Admin</Link>

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { apiFetch } from "@/lib/api-client";
 
 import { PageHeader } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
@@ -65,9 +66,14 @@ function AutoChatPage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <form
           className="panel space-y-6 p-6"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            toast.success("Pengaturan berhasil disimpan");
+            try {
+              await apiFetch("/bot/settings", { method: "PUT", body: { namaBot, instruksi, ambang: ambang[0], aktif } });
+              toast.success("Pengaturan berhasil disimpan");
+            } catch (err) {
+              toast.error(err instanceof Error ? err.message : "Gagal menyimpan");
+            }
           }}
         >
           <div className="grid gap-2">

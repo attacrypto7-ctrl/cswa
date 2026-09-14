@@ -37,9 +37,9 @@ export function AnalitikPage() {
   const pemakaianToken = data?.pemakaianToken ?? [];
   const pertanyaanTeratas = data?.pertanyaanTeratas ?? [];
 
-  const totalChatMingguan = chatHarian.reduce((a, c) => a + c.chat, 0);
-  const totalGagalMingguan = chatHarian.reduce((a, c) => a + c.gagal, 0);
-  const totalToken = pemakaianToken.reduce((a, c) => a + c.token, 0);
+  const totalChatMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce((a, c) => a + c.chat, 0);
+  const totalGagalMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce((a, c) => a + c.gagal, 0);
+  const totalToken = (pemakaianToken as { token: number }[]).reduce((a, c) => a + c.token, 0);
   const suksesPersen =
     totalChatMingguan > 0
       ? Math.round(((totalChatMingguan - totalGagalMingguan) / totalChatMingguan) * 100)
@@ -167,7 +167,7 @@ export function AnalitikPage() {
 
         {pertanyaanTeratas.length > 0 ? (
           <div className="mt-5 space-y-4">
-            {pertanyaanTeratas.map((p, index) => (
+            {pertanyaanTeratas.map((p: { pertanyaan: string; jumlah: number }, index: number) => (
               <div key={p.pertanyaan} className="space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-medium text-foreground">
