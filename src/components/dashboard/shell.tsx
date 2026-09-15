@@ -51,7 +51,9 @@ export function DashboardShell({
               <span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full bg-emerald-500 border-2 border-background" />
             </div>
             <span className="leading-tight">
-              <span className="block text-sm font-semibold text-sidebar-foreground">{googleUser.name}</span>
+              <span className="block text-sm font-semibold text-sidebar-foreground">
+                {googleUser.name}
+              </span>
               <span className="block text-xs text-muted-foreground truncate max-w-[130px]">
                 {googleUser.email}
               </span>

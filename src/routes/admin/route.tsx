@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Building2, KeyRound, LayoutDashboard, ScrollText, Bot, User, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { logout } from "@/lib/api-client";
-=======
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 import {
   Building2,
@@ -18,12 +12,12 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
->>>>>>> Stashed changes
 
 import { DashboardShell, type NavItem } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { logout } from "@/lib/api-client";
 
 const items: NavItem[] = [
   { to: "/admin", label: "Ringkasan", icon: LayoutDashboard },
@@ -41,10 +35,14 @@ function AdminLayout() {
   const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    const auth = sessionStorage.getItem("balasin_admin_auth");
-    if (auth === "true") {
-      setIsAuthenticated(true);
-    } else {
+    try {
+      const auth = sessionStorage.getItem("balasin_admin_auth");
+      if (auth === "true") {
+        setIsAuthenticated(true);
+      } else {
+        setShowLogin(true);
+      }
+    } catch {
       setShowLogin(true);
     }
   }, []);
@@ -56,14 +54,20 @@ function AdminLayout() {
   if (!isAuthenticated) return null;
 
   const handleLogout = () => {
-    sessionStorage.removeItem("balasin_admin_auth");
-    logout();
+    try {
+      sessionStorage.removeItem("balasin_admin_auth");
+    } catch {}
+    try {
+      logout();
+    } catch {}
     setIsAuthenticated(false);
     setShowLogin(true);
   };
 
   const handleBackToHome = () => {
-    sessionStorage.removeItem("balasin_admin_auth");
+    try {
+      sessionStorage.removeItem("balasin_admin_auth");
+    } catch {}
   };
 
   return (
@@ -74,25 +78,29 @@ function AdminLayout() {
       onLogout={handleLogout}
       onBackToHome={handleBackToHome}
       footer={
-<<<<<<< Updated upstream
-        <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground">
-          Keluar →
-        </button>
-=======
-        <Link
-          to="/app"
-          className="group flex w-full items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2.5 text-xs font-semibold text-emerald-100 transition-all duration-300 hover:border-emerald-400/80 hover:bg-emerald-900/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.4),0_0_10px_rgba(16,185,129,0.2)] hover:transform hover:translate-y-[-2px]"
-        >
-          <span className="bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
-            Beralih ke tenant
-          </span>
-          <span className="transition-transform duration-300 ease-out group-hover:translate-x-1.5">
-            →
-          </span>
-        </Link>
->>>>>>> Stashed changes
+        <div className="flex flex-col gap-2">
+          <Link
+            to="/app"
+            className="group flex w-full items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2.5 text-xs font-semibold text-emerald-100 transition-all duration-300 hover:border-emerald-400/80 hover:bg-emerald-900/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.4),0_0_10px_rgba(16,185,129,0.2)] hover:transform hover:translate-y-[-2px]"
+          >
+            <span className="bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
+              Beralih ke tenant
+            </span>
+            <span className="transition-transform duration-300 ease-out group-hover:translate-x-1.5">
+              →
+            </span>
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="text-xs text-muted-foreground hover:text-foreground"
+          >
+            Keluar →
+          </button>
+        </div>
       }
-    />
+    >
+      <Outlet />
+    </DashboardShell>
   );
 }
 
@@ -106,7 +114,9 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
     e.preventDefault();
     setIsLoading(true);
     setTimeout(() => {
-      sessionStorage.setItem("balasin_admin_auth", "true");
+      try {
+        sessionStorage.setItem("balasin_admin_auth", "true");
+      } catch {}
       setIsLoading(false);
       onLogin();
     }, 1500);

@@ -24,7 +24,7 @@ export function loginWithGoogle(email: string): GoogleUser {
     .map((part) => part.charAt(0).toUpperCase())
     .slice(0, 2)
     .join("");
-  
+
   const user: GoogleUser = {
     name: username.replace(/[._-]/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
     email: email,

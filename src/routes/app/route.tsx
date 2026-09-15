@@ -28,17 +28,16 @@ const items: NavItem[] = [
 
 export const Route = createFileRoute("/app")({
   beforeLoad: () => {
-    if (!getGoogleUser()) throw redirect({ to: "/" });
+    try {
+      if (!getGoogleUser()) throw redirect({ to: "/" });
+    } catch (e) {
+      if (e && typeof e === "object" && "statusCode" in e) throw e;
+      return;
+    }
   },
   component: TenantLayout,
 });
 
 function TenantLayout() {
-  return (
-    <DashboardShell
-      title="Balasin"
-      subtitle="Dashboard Tenant"
-      items={items}
-    />
-  );
+  return <DashboardShell title="Balasin" subtitle="Dashboard Tenant" items={items} />;
 }
