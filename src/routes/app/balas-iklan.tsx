@@ -70,19 +70,9 @@ export const Route = createFileRoute("/app/balas-iklan")({
 // & backend dipindah ke bentuk baru ini.
 // -----------------------------------------------------------------------
 
-<<<<<<< HEAD
 type Langkah =
   | { id: string; tipe: "teks"; isiTeks: string }
   | { id: string; tipe: "gambar"; urlGambar?: string; namaGambar?: string | undefined };
-=======
-type Langkah = {
-  id: string;
-  tipe: "teks" | "gambar";
-  isiTeks?: string;
-  urlGambar?: string;
-  namaGambar?: string | undefined;
-};
->>>>>>> f3af05c (debug error, desain UI, dan alur kerja)
 
 function buatId() {
   return Math.random().toString(36).slice(2, 10);

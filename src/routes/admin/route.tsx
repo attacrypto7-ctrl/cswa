@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { Building2, KeyRound, LayoutDashboard, ScrollText } from "lucide-react";
-import { logout } from "@/lib/api-client";
-=======
 import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Building2, KeyRound, LayoutDashboard, ScrollText, Bot, User, Lock, Eye, EyeOff, Loader2, LogOut } from "lucide-react";
+import { Building2, KeyRound, LayoutDashboard, ScrollText, Bot, User, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
->>>>>>> f3af05c (debug error, desain UI, dan alur kerja)
+import { logout } from "@/lib/api-client";
 
 import { DashboardShell, type NavItem } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
@@ -45,6 +40,7 @@ function AdminLayout() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("balasin_admin_auth");
+    logout();
     setIsAuthenticated(false);
     setShowLogin(true);
   };
@@ -61,23 +57,9 @@ function AdminLayout() {
       onLogout={handleLogout}
       onBackToHome={handleBackToHome}
       footer={
-<<<<<<< HEAD
-        <button onClick={() => logout()} className="text-xs text-muted-foreground hover:text-foreground">
+        <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground">
           Keluar →
         </button>
-=======
-        <Link
-          to="/app"
-          className="group flex w-full items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2.5 text-xs font-semibold text-emerald-100 transition-all duration-300 hover:border-emerald-400/80 hover:bg-emerald-900/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.4),0_0_10px_rgba(16,185,129,0.2)] hover:transform hover:translate-y-[-2px]"
-        >
-          <span className="bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
-            Beralih ke tenant
-          </span>
-          <span className="transition-transform duration-300 ease-out group-hover:translate-x-1.5">
-            →
-          </span>
-        </Link>
->>>>>>> f3af05c (debug error, desain UI, dan alur kerja)
       }
     />
   );
@@ -101,7 +83,6 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0a0f14] px-4 font-sans">
-      {/* Ambient Radial Glows */}
       <div className="absolute top-[-10%] left-[-10%] h-[50%] w-[50%] animate-pulse rounded-full bg-emerald-500/10 blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] h-[50%] w-[50%] animate-pulse rounded-full bg-emerald-500/10 blur-[120px] [animation-delay:2s]" />
 
