@@ -35,24 +35,23 @@ Catatan: harga di atas bisa berubah kapan saja, cek ulang di dokumentasi resmi m
 3. Arsitektur Sistem (High-Level)
 
 [Tenant WhatsApp] <--Baileys(QR)--> [WA Gateway Service]
-                                        |
-                                        v
-                              [Message Router / Queue]
-                                        |
-                    -----------------------------------------
-                    |                                       |
-          [Auto Bales Chat Engine]              [Auto Bales Iklan Engine]
-          (RAG dari FAQ tenant + LLM)            (Template matching + opsional LLM)
-                    |                                       |
-                    -----------------------------------------
-                                        |
-                                v
-                        [Database Multi-Tenant]
-                    (tenant, FAQ docs, license, chat log)
-                                        |
-                                        v
-                        [Next.js Dashboard (Admin & Tenant)]
-
+|
+v
+[Message Router / Queue]
+|
+\-----------------------------------------
+| |
+[Auto Bales Chat Engine] [Auto Bales Iklan Engine]
+(RAG dari FAQ tenant + LLM) (Template matching + opsional LLM)
+| |
+\-----------------------------------------
+|
+v
+[Database Multi-Tenant]
+(tenant, FAQ docs, license, chat log)
+|
+v
+[Next.js Dashboard (Admin & Tenant)]
 
 Komponen inti:
 

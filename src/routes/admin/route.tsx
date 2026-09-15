@@ -1,7 +1,24 @@
+<<<<<<< Updated upstream
 import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Building2, KeyRound, LayoutDashboard, ScrollText, Bot, User, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { logout } from "@/lib/api-client";
+=======
+import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
+import {
+  Building2,
+  KeyRound,
+  LayoutDashboard,
+  ScrollText,
+  Bot,
+  User,
+  Lock,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
+import { useState, useEffect } from "react";
+>>>>>>> Stashed changes
 
 import { DashboardShell, type NavItem } from "@/components/dashboard/shell";
 import { Button } from "@/components/ui/button";
@@ -57,9 +74,23 @@ function AdminLayout() {
       onLogout={handleLogout}
       onBackToHome={handleBackToHome}
       footer={
+<<<<<<< Updated upstream
         <button onClick={handleLogout} className="text-xs text-muted-foreground hover:text-foreground">
           Keluar →
         </button>
+=======
+        <Link
+          to="/app"
+          className="group flex w-full items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/30 px-3 py-2.5 text-xs font-semibold text-emerald-100 transition-all duration-300 hover:border-emerald-400/80 hover:bg-emerald-900/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.4),0_0_10px_rgba(16,185,129,0.2)] hover:transform hover:translate-y-[-2px]"
+        >
+          <span className="bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
+            Beralih ke tenant
+          </span>
+          <span className="transition-transform duration-300 ease-out group-hover:translate-x-1.5">
+            →
+          </span>
+        </Link>
+>>>>>>> Stashed changes
       }
     />
   );
@@ -93,13 +124,22 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
               <div className="flex size-14 items-center justify-center rounded-2xl bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)] mb-4">
                 <Bot className="size-8 text-[#0a0f14]" />
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Balasin Admin Panel</h1>
-              <p className="text-sm text-emerald-500/70">Otorisasi diperlukan untuk mengakses sistem</p>
+              <h1 className="text-2xl font-bold tracking-tight text-white mb-2">
+                Balasin Admin Panel
+              </h1>
+              <p className="text-sm text-emerald-500/70">
+                Otorisasi diperlukan untuk mengakses sistem
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-xs font-semibold uppercase tracking-wider text-emerald-500/50 ml-1">Username</Label>
+                <Label
+                  htmlFor="username"
+                  className="text-xs font-semibold uppercase tracking-wider text-emerald-500/50 ml-1"
+                >
+                  Username
+                </Label>
                 <div className="relative group">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-emerald-500/30 group-focus-within:text-emerald-500 transition-colors" />
                   <Input
@@ -115,7 +155,12 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-emerald-500/50 ml-1">Password</Label>
+                <Label
+                  htmlFor="password"
+                  className="text-xs font-semibold uppercase tracking-wider text-emerald-500/50 ml-1"
+                >
+                  Password
+                </Label>
                 <div className="relative group">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-emerald-500/30 group-focus-within:text-emerald-500 transition-colors" />
                   <Input
@@ -174,7 +219,9 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
             </div>
           </div>
           <div className="bg-emerald-500/5 py-4 px-8 border-t border-emerald-500/10">
-             <p className="text-[10px] text-center text-emerald-500/40 uppercase tracking-[0.2em]">Secure Encryption Active • v2.4.0</p>
+            <p className="text-[10px] text-center text-emerald-500/40 uppercase tracking-[0.2em]">
+              Secure Encryption Active • v2.4.0
+            </p>
           </div>
         </div>
       </div>

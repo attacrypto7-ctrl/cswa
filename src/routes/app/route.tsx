@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   BarChart3,
   FlaskConical,
@@ -10,9 +10,9 @@ import {
   Megaphone,
   Smartphone,
 } from "lucide-react";
-import { logout } from "@/lib/api-client";
 
 import { DashboardShell, type NavItem } from "@/components/dashboard/shell";
+import { getGoogleUser } from "@/lib/google-auth";
 
 const items: NavItem[] = [
   { to: "/app", label: "Ringkasan", icon: LayoutDashboard },
@@ -27,6 +27,9 @@ const items: NavItem[] = [
 ];
 
 export const Route = createFileRoute("/app")({
+  beforeLoad: () => {
+    if (!getGoogleUser()) throw redirect({ to: "/" });
+  },
   component: TenantLayout,
 });
 
@@ -36,11 +39,6 @@ function TenantLayout() {
       title="Balasin"
       subtitle="Dashboard Tenant"
       items={items}
-      footer={
-        <button onClick={() => logout()} className="text-xs text-muted-foreground hover:text-foreground">
-          Keluar →
-        </button>
-      }
     />
   );
 }

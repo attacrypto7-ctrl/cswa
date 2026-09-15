@@ -34,7 +34,13 @@ export const getTenant = (id: string) => {
 };
 export const getLicenses = () => apiFetch<AnyRecord[]>("/admin/licenses");
 export const getLicensesByTenant = (tenantId: string) =>
+<<<<<<< Updated upstream
   isLoggedIn() ? apiFetch<AnyRecord[]>(`/admin/licenses?tenantId=${tenantId}`) : delay(licenses.filter((l) => l.tenantId === tenantId));
+=======
+  isLoggedIn()
+    ? apiFetch<AnyRecord[]>(`/admin/licenses?tenantId=${tenantId}`)
+    : delay(licenses.filter((l) => l.tenantId === tenantId));
+>>>>>>> Stashed changes
 export const getWaNumbers = () => {
   if (isLoggedIn()) return apiFetch<AnyRecord[]>("/whatsapp/numbers");
   return delay(waNumbers);

@@ -40,8 +40,14 @@ function AnalitikPage() {
   const pemakaianToken = data?.pemakaianToken ?? [];
   const pertanyaanTeratas = data?.pertanyaanTeratas ?? [];
 
-  const totalChatMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce((a, c) => a + c.chat, 0);
-  const totalGagalMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce((a, c) => a + c.gagal, 0);
+  const totalChatMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce(
+    (a, c) => a + c.chat,
+    0,
+  );
+  const totalGagalMingguan = (chatHarian as { chat: number; gagal: number }[]).reduce(
+    (a, c) => a + c.gagal,
+    0,
+  );
   const totalToken = (pemakaianToken as { token: number }[]).reduce((a, c) => a + c.token, 0);
   const suksesPersen =
     totalChatMingguan > 0

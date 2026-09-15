@@ -27,7 +27,10 @@ function MasukPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) { toast.error("Masukkan email terlebih dahulu"); return; }
+    if (!email.trim()) {
+      toast.error("Masukkan email terlebih dahulu");
+      return;
+    }
     setSibuk(true);
     try {
       const res = await login(email.trim(), password);
@@ -57,11 +60,25 @@ function MasukPage() {
           <form onSubmit={submit} className="space-y-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="nama@bisnis.id" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="nama@bisnis.id"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Kata sandi</Label>
-              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
               <p className="text-xs text-muted-foreground">
                 Akun tenant dibuat saat pendaftaran; akun admin dibuat lewat seed database.
               </p>
@@ -71,7 +88,9 @@ function MasukPage() {
             </Button>
           </form>
           <p className="text-center text-xs text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">← Kembali ke beranda</Link>
+            <Link to="/" className="hover:text-foreground">
+              ← Kembali ke beranda
+            </Link>
           </p>
         </div>
       </div>

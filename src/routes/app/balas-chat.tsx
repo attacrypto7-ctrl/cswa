@@ -80,7 +80,10 @@ function AutoChatPage() {
           onSubmit={async (e) => {
             e.preventDefault();
             try {
-              await apiFetch("/bot/settings", { method: "PUT", body: { namaBot, instruksi, ambang: ambang[0], aktif } });
+              await apiFetch("/bot/settings", {
+                method: "PUT",
+                body: { namaBot, instruksi, ambang: ambang[0], aktif },
+              });
               toast.success("Pengaturan berhasil disimpan");
             } catch (err) {
               toast.error(err instanceof Error ? err.message : "Gagal menyimpan");
