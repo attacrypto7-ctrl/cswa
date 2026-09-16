@@ -1,10 +1,11 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-import { Home } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { ChevronDown, Home, LogOut, UserPlus } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { getGoogleUser, GoogleUser } from "@/lib/google-auth";
+import { getGoogleUser, handleLogout, GoogleUser } from "@/lib/google-auth";
+import { API_BASE } from "@/lib/api-client";
 
 export interface NavItem {
   to: string;
@@ -31,37 +32,130 @@ export function DashboardShell({
 }: ShellProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
+  const [imgError, setImgError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsOpen(true);
+  };
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+    }, 200);
+  };
 
   useEffect(() => {
-    const user = getGoogleUser();
-    if (user) setGoogleUser(user);
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
+
+  useEffect(() => {
+    const sync = () => {
+      setGoogleUser(getGoogleUser());
+      setImgError(false);
+    };
+    sync();
+    window.addEventListener("balasin:auth-changed", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("balasin:auth-changed", sync);
+      window.removeEventListener("storage", sync);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [googleUser?.avatarUrl, googleUser?.picture]);
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    setGoogleUser(null);
+    if (onLogout) onLogout();
+  };
+
+  const avatarSrc = googleUser?.avatarUrl || googleUser?.picture || null;
+  const initials = googleUser
+    ? googleUser.name
+        .split(" ")
+        .map((p) => p.charAt(0).toUpperCase())
+        .slice(0, 2)
+        .join("") || "?"
+    : "?";
 
   return (
     <div className="flex min-h-screen bg-background">
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar px-4 py-6 md:flex">
         {googleUser ? (
-          <div className="mb-8 flex cursor-pointer items-center gap-3 px-2 transition-opacity hover:opacity-80">
-            <div className="relative">
-              <img
-                src={googleUser.picture}
-                alt="Google Profile"
-                className="size-9 rounded-xl object-cover border border-emerald-500/30"
-              />
-              <span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full bg-emerald-500 border-2 border-background" />
-            </div>
-            <span className="leading-tight">
-              <span className="block text-sm font-semibold text-sidebar-foreground">
-                {googleUser.name}
+          <div
+            className="relative mb-8"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button className="flex w-full cursor-pointer items-center gap-3 px-2 text-left transition-opacity hover:opacity-80 focus-visible:outline-none">
+              <span className="relative shrink-0">
+                {avatarSrc && !imgError ? (
+                  <img
+                    src={avatarSrc}
+                    alt="Google Profile"
+                    referrerPolicy="no-referrer"
+                    onError={() => setImgError(true)}
+                    className="w-10 h-10 rounded-full object-cover border border-emerald-500/30"
+                  />
+                ) : (
+                  <span className="flex w-10 h-10 rounded-full items-center justify-center border border-emerald-500/30 bg-emerald-500/15 text-xs font-bold text-emerald-200">
+                    {initials}
+                  </span>
+                )}
+                <span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full bg-emerald-500 border-2 border-background" />
               </span>
-              <span className="block text-xs text-muted-foreground truncate max-w-[130px]">
-                {googleUser.email}
+              <span className="min-w-0 flex-1 leading-tight">
+                <span className="block truncate text-sm font-semibold text-sidebar-foreground">
+                  {googleUser.name}
+                </span>
+                <span className="block truncate text-xs text-muted-foreground max-w-[130px]">
+                  {googleUser.email}
+                </span>
               </span>
-            </span>
+              <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+            </button>
+            {isOpen && (
+              <div className="absolute top-full left-0 pt-2 z-50">
+                <div className="w-64 rounded-md border bg-popover p-1 shadow-md">
+                  <div className="px-2 py-2">
+                    <p className="text-sm font-semibold leading-none">{googleUser.name}</p>
+                    <p className="text-xs text-muted-foreground truncate mt-1">{googleUser.email}</p>
+                  </div>
+                  <div className="-mx-1 my-1 h-px bg-muted" />
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      window.open(
+                        `${API_BASE}/auth/google`,
+                        "google_oauth",
+                        "width=500,height=600,left=200,top=100",
+                      );
+                    }}
+                    className="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                  >
+                    <UserPlus className="size-4" />
+                    Tambahkan akun lain
+                  </button>
+                  <button
+                    onClick={handleLogoutClick}
+                    className="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent text-red-600 focus:text-red-600 hover:text-red-600"
+                  >
+                    <LogOut className="size-4" />
+                    Log Out / Keluar
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="mb-8 h-[52px]" />
-        )}
+        ) : null}
 
         <nav className="flex flex-1 flex-col gap-1">
           {items.map((item) => {

@@ -1,6 +1,18 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Bot, FileText, MessageSquare, QrCode, ShieldCheck, Zap, Eye, EyeOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import {
+  Bot,
+  FileText,
+  MessageSquare,
+  QrCode,
+  ShieldCheck,
+  Zap,
+  Eye,
+  EyeOff,
+  ChevronDown,
+  LogOut,
+  UserPlus,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_BASE, saveSession } from "@/lib/api-client";
-import { saveGoogleUser } from "@/lib/google-auth";
+import { getGoogleUser, handleLogout, saveGoogleUser, type GoogleUser } from "@/lib/google-auth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,7 +83,6 @@ const fitur = [
 ];
 
 function Landing() {
-  const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,6 +90,44 @@ function Landing() {
   const [isError, setIsError] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [oauthError, setOauthError] = useState<string | null>(null);
+  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
+  const [avatarError, setAvatarError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsOpen(true);
+  };
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+    }, 200);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sync = () => {
+      setGoogleUser(getGoogleUser());
+      setAvatarError(false);
+    };
+    sync();
+    window.addEventListener("balasin:auth-changed", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("balasin:auth-changed", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [googleUser?.avatarUrl, googleUser?.picture]);
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
@@ -86,19 +135,22 @@ function Landing() {
         if (event.data?.type === "GOOGLE_AUTH_SUCCESS") {
           const { token, user } = event.data as {
             token: string;
-            user: { name: string; email: string; picture: string };
+            user: { name: string; email: string; picture: string; avatarUrl?: string | null };
           };
           setOauthError(null);
           try {
             saveSession(token, "tenant");
-            saveGoogleUser(user);
+            saveGoogleUser({
+              ...user,
+              avatarUrl: user.avatarUrl ?? user.picture ?? null,
+              picture: user.picture || user.avatarUrl || "",
+            });
           } catch {
             setOauthError("Gagal menyimpan sesi, coba lagi");
             return;
           }
           toast.success("Berhasil masuk dengan Google");
           setShowLogin(false);
-          navigate({ to: "/app" });
         }
         if (event.data?.type === "GOOGLE_AUTH_ERROR") {
           const msg = (event.data?.message as string) || "Autentikasi Google gagal";
@@ -111,7 +163,7 @@ function Landing() {
     };
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [navigate]);
+  }, []);
 
   const handleGoogleClick = () => {
     setOauthError(null);
@@ -147,24 +199,93 @@ function Landing() {
     }, 300);
   };
 
+  const avatarSrc = googleUser?.avatarUrl || googleUser?.picture || null;
+  const initials = googleUser
+    ? googleUser.name
+        .split(" ")
+        .map((p) => p.charAt(0).toUpperCase())
+        .slice(0, 2)
+        .join("") || "?"
+    : "?";
+
   return (
     <>
       <AmbientBackground />
       <div className="surface-grid min-h-screen">
         <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-          <span className="flex items-center gap-2 text-lg font-bold">
+          <Link to="/" className="flex items-center gap-2 text-lg font-bold">
             <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Bot className="size-5" />
             </span>
             Balasin
-          </span>
+          </Link>
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowLogin(true)}
-              className="cursor-pointer rounded-xl bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] will-change-transform active:translate-y-0"
-            >
-              Masuk
-            </button>
+            {googleUser ? (
+              <div
+                className="relative"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                <button className="flex cursor-pointer items-center gap-2.5 rounded-full border border-border bg-card/50 p-1 pr-3 transition-colors hover:bg-accent focus-visible:outline-none">
+                  <span className="relative flex size-8 shrink-0">
+                    {avatarSrc && !avatarError ? (
+                      <img
+                        src={avatarSrc}
+                        alt="Profile"
+                        referrerPolicy="no-referrer"
+                        onError={() => setAvatarError(true)}
+                        className="size-8 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                        {initials}
+                      </span>
+                    )}
+                  </span>
+                  <span className="hidden text-sm font-medium sm:inline-block">
+                    {googleUser.name.split(" ")[0]}
+                  </span>
+                  <ChevronDown className="size-3.5 text-muted-foreground" />
+                </button>
+                {isOpen && (
+                  <div className="absolute top-full right-0 pt-2 z-50">
+                    <div className="w-56 rounded-md border bg-popover p-1 shadow-md">
+                      <div className="px-2 py-1.5">
+                        <p className="text-sm font-semibold">{googleUser.name}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground truncate">
+                          {googleUser.email}
+                        </p>
+                      </div>
+                      <div className="-mx-1 my-1 h-px bg-muted" />
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          setShowLogin(true);
+                        }}
+                        className="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <UserPlus className="mr-2 size-4" />
+                        Tambahkan akun lain
+                      </button>
+                      <button
+                        onClick={() => handleLogout()}
+                        className="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent text-red-600 focus:text-red-600 hover:text-red-600"
+                      >
+                        <LogOut className="mr-2 size-4" />
+                        Log Out / Keluar
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowLogin(true)}
+                className="cursor-pointer rounded-xl bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] will-change-transform active:translate-y-0"
+              >
+                Masuk
+              </button>
+            )}
           </div>
         </header>
 
