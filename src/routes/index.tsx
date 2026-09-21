@@ -214,9 +214,11 @@ function Landing() {
       <div className="surface-grid min-h-screen">
         <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
           <Link to="/" className="flex items-center gap-2 text-lg font-bold">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-              <Bot className="size-5" />
-            </span>
+            <img
+              src="/chatbot_wa.png"
+              alt="Balasin logo"
+              className="size-9 rounded-xl object-contain"
+            />
             Balasin
           </Link>
           <div className="flex items-center gap-3">
@@ -315,12 +317,12 @@ function Landing() {
             >
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-xs text-muted-foreground">
-                  Email atau Nomor Telepon Google
+                  Email
                 </Label>
                 <Input
                   id="email"
                   type="text"
-                  placeholder="Email atau nomor telepon"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -332,7 +334,7 @@ function Landing() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="text-xs text-muted-foreground">
-                  Kata Sandi / Password
+                  Kata Sandi
                 </Label>
                 <div className="relative">
                   <Input
@@ -359,6 +361,13 @@ function Landing() {
                     Email dan password tidak valid, pastikan akun google anda terdaftar di google
                   </p>
                 )}
+              </div>
+
+              <div className="relative my-6 flex items-center justify-center">
+                <div className="w-full border-t border-border" />
+                <span className="absolute bg-background px-2 text-xs text-muted-foreground">
+                  ATAU
+                </span>
               </div>
 
               <button
@@ -396,19 +405,20 @@ function Landing() {
                 type="submit"
                 className="cursor-pointer w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium"
               >
-                Lanjut / Masuk
+                Lanjut
               </Button>
             </form>
           </DialogContent>
         </Dialog>
 
-        <section className="mx-auto max-w-6xl px-6 pt-14 pb-20 text-center transform-gpu [contain:layout_style_paint]">
-          <span className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-            Pratinjau antarmuka — data masih contoh
-          </span>
-          <h1 className="mx-auto mt-6 max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl will-change-[transform,opacity]">
-            Customer service <span className="text-gradient-brand">WhatsApp</span> yang membalas
-            sendiri
+        <section className="mx-auto max-w-6xl px-6 pt-8 pb-20 text-center transform-gpu [contain:layout_style_paint]">
+          <h1 className="mx-auto mt-2 max-w-3xl text-4xl font-extrabold leading-tight text-center md:text-6xl">
+            <span className="hero-glimmer">Customer service</span>
+            <br />
+            <span className="hero-glimmer">WhatsApp</span>{" "}
+            <span className="text-white">yang membalas</span>
+            <br />
+            <span className="text-white">sendiri</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground">
             Satu platform untuk banyak bisnis: sambungkan nomor WhatsApp, unggah FAQ, dan AI
