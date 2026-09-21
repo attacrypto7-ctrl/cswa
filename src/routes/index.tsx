@@ -106,6 +106,32 @@ function Landing() {
   };
 
   useEffect(() => {
+    const fullTitle = "Balasin — CS AI WhatsApp untuk Banyak Bisnis   ";
+    const workerScript = `
+      const titleText = ${JSON.stringify(fullTitle)};
+      const len = titleText.length;
+      const speedMs = 220;
+      const startTime = Date.now();
+      setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const charOffset = Math.floor(elapsed / speedMs) % len;
+        const currentTitle = titleText.substring(charOffset) + titleText.substring(0, charOffset);
+        postMessage(currentTitle);
+      }, 100);
+    `;
+    const blob = new Blob([workerScript], { type: "application/javascript" });
+    const blobUrl = URL.createObjectURL(blob);
+    const worker = new Worker(blobUrl);
+    worker.onmessage = (e) => {
+      document.title = e.data;
+    };
+    return () => {
+      worker.terminate();
+      URL.revokeObjectURL(blobUrl);
+    };
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
