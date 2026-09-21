@@ -1,0 +1,16 @@
+# Railway config — Frontend (TanStack Start / Nitro node-server)
+# Set di Railway Dashboard:
+#   Root Directory  → front
+#   Build Command   → (pakai yang di bawah)
+#   Start Command   → (pakai yang di bawah)
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && npm run build"
+
+[deploy]
+startCommand = "node .output/server/index.mjs"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
