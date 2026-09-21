@@ -423,7 +423,10 @@ function Landing() {
 
         <section className="mx-auto grid max-w-6xl auto-rows-fr gap-4 px-6 pb-24 sm:grid-cols-2 lg:grid-cols-3">
           {fitur.map((f) => (
-            <article key={f.judul} className="flex h-full min-h-[215px] cursor-pointer flex-col panel feature-card p-6">
+            <article
+              key={f.judul}
+              className="flex h-full min-h-[215px] cursor-pointer flex-col panel feature-card p-6"
+            >
               <span className="feature-icon flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <f.icon className="size-5" />
               </span>
