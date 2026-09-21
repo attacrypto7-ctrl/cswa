@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   Bot,
   FileText,
@@ -12,7 +12,7 @@ import {
   LogOut,
   UserPlus,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -94,6 +94,8 @@ function Landing() {
   const [avatarError, setAvatarError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navigate = useNavigate();
+  const googleClickLockRef = useRef(false);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -177,14 +179,20 @@ function Landing() {
           }
           toast.success("Berhasil masuk dengan Google");
           setShowLogin(false);
+          googleClickLockRef.current = false;
+          window.setTimeout(() => {
+            navigate({ to: "/" });
+          }, 250);
         }
         if (event.data?.type === "GOOGLE_AUTH_ERROR") {
           const msg = (event.data?.message as string) || "Autentikasi Google gagal";
           setOauthError(msg);
           toast.error(msg);
+          googleClickLockRef.current = false;
         }
       } catch {
         setOauthError("Terjadi kesalahan saat memproses login Google");
+        googleClickLockRef.current = false;
       }
     };
     window.addEventListener("message", handler);
@@ -192,6 +200,8 @@ function Landing() {
   }, []);
 
   const handleGoogleClick = () => {
+    if (googleClickLockRef.current) return;
+    googleClickLockRef.current = true;
     setOauthError(null);
     try {
       const popup = window.open(
@@ -202,10 +212,23 @@ function Landing() {
       if (!popup) {
         setOauthError("Popup diblokir browser. Izinkan popup untuk login Google.");
         toast.error("Popup diblokir browser");
+        googleClickLockRef.current = false;
+        return;
       }
+      const timer = window.setInterval(() => {
+        if (popup.closed) {
+          window.clearInterval(timer);
+          googleClickLockRef.current = false;
+        }
+      }, 800);
+      window.setTimeout(() => {
+        googleClickLockRef.current = false;
+        window.clearInterval(timer);
+      }, 30000);
     } catch {
       setOauthError("Gagal membuka login Google. Coba lagi.");
       toast.error("Gagal membuka login Google");
+      googleClickLockRef.current = false;
     }
   };
 
@@ -451,8 +474,13 @@ function Landing() {
             menjawab pelanggan 24 jam dengan jawaban yang Anda kendalikan.
           </p>
           <div className="mt-8 flex justify-center">
-            <Button asChild size="lg" className="cta-button">
-              <Link to="/app">Lihat Dashboard Tenant</Link>
+            <Button
+              size="lg"
+              className="cta-button"
+              onClick={() => window.location.assign("/app")}
+              type="button"
+            >
+              Lihat Dashboard Tenant
             </Button>
           </div>
         </section>
