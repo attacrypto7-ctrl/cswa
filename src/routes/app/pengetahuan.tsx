@@ -78,29 +78,47 @@ function KnowledgePage() {
 
           <div className="panel overflow-hidden">
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nama</TableHead>
-                  <TableHead>Tipe</TableHead>
-                  <TableHead>Ukuran</TableHead>
-                  <TableHead>Versi</TableHead>
-                  <TableHead>Diperbarui</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Aksi</TableHead>
+              <TableHeader className="bg-card/50">
+                <TableRow className="border-b border-border hover:bg-transparent">
+                  <TableHead className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Nama
+                  </TableHead>
+                  <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Tipe
+                  </TableHead>
+                  <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Ukuran
+                  </TableHead>
+                  <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Versi
+                  </TableHead>
+                  <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Diperbarui
+                  </TableHead>
+                  <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                    Status
+                  </TableHead>
+                  <TableHead className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground">
+                    Aksi
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {docs.map((d) => (
-                  <TableRow key={d.id}>
-                    <TableCell className="flex items-center gap-2 font-medium">
-                      <FileText className="size-4 text-muted-foreground" />
-                      {d.nama}
+                  <TableRow key={d.id} className="border-b border-border">
+                    <TableCell className="px-6 py-3 font-medium border-r border-border">
+                      <div className="flex items-center gap-2">
+                        <FileText className="size-4 shrink-0 text-muted-foreground" />
+                        <span>{d.nama}</span>
+                      </div>
                     </TableCell>
-                    <TableCell>{d.tipe}</TableCell>
-                    <TableCell>{d.ukuran}</TableCell>
-                    <TableCell>v{d.versi}</TableCell>
-                    <TableCell>{formatDate(d.diperbarui)}</TableCell>
-                    <TableCell>
+                    <TableCell className="px-4 py-3 border-r border-border">{d.tipe}</TableCell>
+                    <TableCell className="px-4 py-3 border-r border-border">{d.ukuran}</TableCell>
+                    <TableCell className="px-4 py-3 border-r border-border">v{d.versi}</TableCell>
+                    <TableCell className="px-4 py-3 border-r border-border">
+                      {formatDate(d.diperbarui)}
+                    </TableCell>
+                    <TableCell className="px-4 py-3 border-r border-border">
                       <StatusPill
                         label={labelStatusDokumen(d.status)}
                         tone={
@@ -112,7 +130,7 @@ function KnowledgePage() {
                         }
                       />
                     </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
+                    <TableCell className="px-6 py-3 text-right whitespace-nowrap">
                       <Button
                         size="sm"
                         variant="ghost"
@@ -135,7 +153,7 @@ function KnowledgePage() {
                   <TableRow>
                     <TableCell
                       colSpan={7}
-                      className="py-10 text-center text-sm text-muted-foreground"
+                      className="px-6 py-10 text-center text-sm text-muted-foreground"
                     >
                       Belum ada dokumen yang diunggah. Unggah file PDF atau berkas teks di atas.
                     </TableCell>

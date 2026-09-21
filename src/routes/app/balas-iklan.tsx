@@ -169,19 +169,29 @@ function AutoAdsPage() {
             <span className="text-xs text-muted-foreground">{templates.length} pertanyaan</span>
           </div>
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Pertanyaan dari pelanggan</TableHead>
-                <TableHead>Balasan (berurutan)</TableHead>
-                <TableHead>Cara mencocokkan</TableHead>
-                <TableHead>Dipakai</TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
+            <TableHeader className="bg-card/40">
+              <TableRow className="border-b border-border hover:bg-transparent">
+                <TableHead className="px-6 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                  Pertanyaan dari pelanggan
+                </TableHead>
+                <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                  Balasan (berurutan)
+                </TableHead>
+                <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                  Cara mencocokkan
+                </TableHead>
+                <TableHead className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground border-r border-border">
+                  Dipakai
+                </TableHead>
+                <TableHead className="px-6 py-3 text-right text-xs font-semibold text-muted-foreground">
+                  Aksi
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {templates.map((t: any) => (
-                <TableRow key={t.id}>
-                  <TableCell className="max-w-[220px] align-top">
+                <TableRow key={t.id} className="border-b border-border">
+                  <TableCell className="max-w-[220px] px-6 py-3 align-top border-r border-border">
                     <p className="font-medium">{t.pertanyaan}</p>
                     {!t.aktif ? (
                       <span className="mt-2 inline-block">
@@ -189,7 +199,7 @@ function AutoAdsPage() {
                       </span>
                     ) : null}
                   </TableCell>
-                  <TableCell className="max-w-sm align-top">
+                  <TableCell className="max-w-sm px-4 py-3 align-top border-r border-border">
                     <ol className="space-y-1.5">
                       {t.langkah.map((l: Langkah, i: number) => (
                         <li key={l.id} className="flex items-start gap-2 text-xs">
@@ -207,14 +217,16 @@ function AutoAdsPage() {
                       ))}
                     </ol>
                   </TableCell>
-                  <TableCell className="align-top">
+                  <TableCell className="px-4 py-3 align-top border-r border-border">
                     <StatusPill
                       label={t.caraMencocokkan === "sama_persis" ? "Sama persis" : "Boleh mirip"}
                       tone={t.caraMencocokkan === "sama_persis" ? "info" : "warning"}
                     />
                   </TableCell>
-                  <TableCell className="align-top">{formatNumber(t.dipakai)}x</TableCell>
-                  <TableCell className="text-right align-top">
+                  <TableCell className="px-4 py-3 align-top border-r border-border">
+                    {formatNumber(t.dipakai)}x
+                  </TableCell>
+                  <TableCell className="px-6 py-3 text-right align-top">
                     <Button
                       size="sm"
                       variant="ghost"
