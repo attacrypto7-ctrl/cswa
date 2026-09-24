@@ -12,7 +12,7 @@ import {
   LogOut,
   UserPlus,
 } from "lucide-react";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -93,6 +93,9 @@ function Landing() {
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
   const [avatarError, setAvatarError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
+  const [loadingFading, setLoadingFading] = useState(false);
+  const [landingReady, setLandingReady] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
   const googleClickLockRef = useRef(false);
@@ -130,6 +133,18 @@ function Landing() {
     return () => {
       worker.terminate();
       URL.revokeObjectURL(blobUrl);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fadeTimer = window.setTimeout(() => setLoadingFading(true), 2000);
+    const hideTimer = window.setTimeout(() => {
+      setShowLoading(false);
+      setLandingReady(true);
+    }, 2520);
+    return () => {
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(hideTimer);
     };
   }, []);
 
@@ -260,8 +275,130 @@ function Landing() {
   return (
     <>
       <AmbientBackground />
+      {showLoading ? (
+        <div
+          aria-hidden={!showLoading}
+          className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden ${loadingFading ? "pointer-events-none" : ""}`}
+          style={{
+            backgroundColor: "oklch(0.13 0.012 170)",
+            opacity: loadingFading ? 0 : 1,
+            transition: "opacity 500ms cubic-bezier(0.4, 0, 0.2, 1)",
+            willChange: "opacity",
+          }}
+        >
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div
+              className="absolute inset-0 opacity-[0.9]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(16,185,129,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.055) 1px, transparent 1px)",
+                backgroundSize: "42px 42px",
+                maskImage: "radial-gradient(ellipse 72% 62% at 50% 50%, black 36%, transparent 74%)",
+                WebkitMaskImage: "radial-gradient(ellipse 72% 62% at 50% 50%, black 36%, transparent 74%)",
+                willChange: "opacity",
+                transform: "translateZ(0)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 620px 420px at 50% 46%, oklch(0.72 0.145 157 / 18%), transparent 68%), radial-gradient(ellipse 900px 680px at 50% 50%, oklch(0.7 0.11 230 / 07%), transparent 75%)",
+                willChange: "opacity",
+                transform: "translateZ(0)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background: "radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,0.64) 92%)",
+                willChange: "opacity",
+              }}
+            />
+            <div className="absolute left-1/2 top-1/2 size-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/[0.07] blur-[70px]" style={{ willChange: "opacity", transform: "translate3d(-50%,-50%,0)" }} />
+          </div>
+
+          <div className="relative flex flex-col items-center justify-center">
+            <div className="relative flex size-28 items-center justify-center sm:size-32">
+              <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <div className="loading-quantum-ring-5 absolute size-[198%] rounded-full" style={{ willChange: "transform" }}>
+                  <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
+                    <circle cx="50" cy="50" r="46.8" fill="none" stroke="rgba(52,211,153,0.32)" strokeWidth="0.55" strokeDasharray="0.7 9" strokeLinecap="butt" opacity={0.9} />
+                    <circle cx="50" cy="50" r="46.8" fill="none" stroke="rgba(52,211,153,0.95)" strokeWidth="1.1" strokeDasharray="1.6 18 0.6 18" strokeLinecap="round" />
+                    <g fill="rgba(52,211,153,0.9)">
+                      <circle cx="50" cy="3.2" r="1.05" />
+                      <circle cx="96.8" cy="50" r="1.05" />
+                      <circle cx="50" cy="96.8" r="1.05" />
+                      <circle cx="3.2" cy="50" r="1.05" />
+                    </g>
+                    <g fill="rgba(45,212,191,0.75)">
+                      <circle cx="75.6" cy="14.4" r="0.7" />
+                      <circle cx="85.6" cy="24.4" r="0.7" />
+                      <circle cx="75.6" cy="85.6" r="0.7" />
+                      <circle cx="24.4" cy="85.6" r="0.7" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="loading-quantum-ring-1 absolute size-[152%] rounded-full" style={{ willChange: "transform" }}>
+                  <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
+                    <circle cx="50" cy="50" r="46.5" fill="none" stroke="rgba(52,211,153,0.95)" strokeWidth="1.25" strokeDasharray="8 5.5" strokeLinecap="round" pathLength={100} />
+                    <circle cx="50" cy="50" r="46.5" fill="none" stroke="rgba(167,243,208,0.5)" strokeWidth="0.5" strokeDasharray="0.9 22" strokeLinecap="round" opacity={0.85} />
+                  </svg>
+                </div>
+                <div className="loading-quantum-ring-2 absolute size-[174%] rounded-full" style={{ willChange: "transform" }}>
+                  <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(45,212,191,0.85)" strokeWidth="1.05" strokeDasharray="0.6 10" strokeLinecap="butt" opacity={0.9} />
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(52,211,153,0.9)" strokeWidth="1.2" strokeDasharray="12 11 1 11" strokeLinecap="round" />
+                    <g stroke="rgba(52,211,153,0.88)" strokeWidth="1.2" strokeLinecap="round" fill="none">
+                      <path d="M50 1.8 L50 7.2 M50 92.8 L50 98.2 M1.8 50 L7.2 50 M92.8 50 L98.2 50" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="loading-quantum-ring-3 absolute size-[130%] rounded-full" style={{ willChange: "transform" }}>
+                  <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(52,211,153,0.92)" strokeWidth="1" strokeDasharray="0 8.2" strokeLinecap="round" />
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(16,185,129,0.28)" strokeWidth="0.55" strokeDasharray="0.7 8.2" strokeLinecap="round" opacity={0.65} />
+                  </svg>
+                </div>
+                <div className="loading-quantum-ring-4 absolute size-[114%] rounded-full" style={{ willChange: "transform, opacity" }}>
+                  <svg viewBox="0 0 100 100" className="size-full overflow-visible" aria-hidden>
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(16,185,129,0.38)" strokeWidth="0.9" />
+                    <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(52,211,153,0.55)" strokeWidth="0.5" strokeDasharray="1 14" strokeLinecap="round" opacity={0.5} />
+                  </svg>
+                </div>
+                <div className="absolute size-[90%] rounded-full bg-emerald-500/[0.09] blur-2xl" style={{ willChange: "opacity", transform: "translateZ(0)" }} />
+                <div className="absolute size-[58%] rounded-full bg-cyan-400/[0.07] blur-xl" style={{ willChange: "opacity", transform: "translateZ(0)" }} />
+              </div>
+              <div className="loading-levitate relative flex size-[5.25rem] items-center justify-center overflow-hidden rounded-full border border-emerald-400/20 bg-white/[0.015] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_10px_36px_rgba(0,0,0,0.5)] backdrop-blur-sm sm:size-[5.75rem]" style={{ willChange: "transform" }}>
+                <img
+                  src="/chatbot_wa.png"
+                  alt=""
+                  width={92}
+                  height={92}
+                  className="loading-bot-pulse size-[5.1rem] rounded-full object-contain sm:size-[5.5rem]"
+                  style={{ willChange: "transform, opacity" }}
+                />
+                <div className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_22px_rgba(16,185,129,0.14)] ring-1 ring-emerald-400/15" />
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-col items-center gap-1.5">
+              <p className="loading-shimmer-text text-[14px] font-semibold tracking-[0.16em] sm:text-[15px]" style={{ willChange: "opacity", transform: "translateZ(0)" }}>
+                Memuat chatbot...
+              </p>
+              <div className="flex items-center gap-1.5" aria-hidden>
+                <span className="loading-dot size-1 rounded-full bg-emerald-400" style={{ animationDelay: "0ms" } as React.CSSProperties} />
+                <span className="loading-dot size-1 rounded-full bg-emerald-400" style={{ animationDelay: "220ms" } as React.CSSProperties} />
+                <span className="loading-dot size-1 rounded-full bg-cyan-400" style={{ animationDelay: "440ms" } as React.CSSProperties} />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className="surface-grid min-h-screen">
-        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <header
+          className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-6 ${landingReady ? "landing-entry landing-entry-delay-1" : "opacity-0"}`}
+        >
           <Link to="/" className="flex items-center gap-2 text-lg font-bold">
             <img
               src="/chatbot_wa.png"
@@ -461,19 +598,23 @@ function Landing() {
         </Dialog>
 
         <section className="mx-auto max-w-6xl px-6 pt-8 pb-20 text-center transform-gpu [contain:layout_style_paint]">
-          <h1 className="mx-auto mt-2 max-w-3xl text-4xl font-extrabold leading-tight text-center md:text-6xl">
+          <h1
+            className={`mx-auto mt-2 max-w-3xl text-4xl font-extrabold leading-tight text-center md:text-6xl ${landingReady ? "landing-entry landing-entry-delay-2" : "opacity-0"}`}
+          >
             <span className="hero-glimmer">Customer service</span>
             <br />
-            <span className="hero-glimmer">WhatsApp</span>{" "}
-            <span className="text-white">yang membalas</span>
+            <span className="hero-glimmer">WhatsApp</span> <span className="text-white">yang membalas</span>
             <br />
             <span className="text-white">sendiri</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground">
-            Satu platform untuk banyak bisnis: sambungkan nomor WhatsApp, unggah FAQ, dan AI
-            menjawab pelanggan 24 jam dengan jawaban yang Anda kendalikan.
+          <p
+            className={`mx-auto mt-5 max-w-xl text-base text-muted-foreground ${landingReady ? "landing-entry landing-entry-delay-3" : "opacity-0"}`}
+          >
+            Satu platform untuk banyak bisnis: sambungkan nomor WhatsApp, unggah FAQ, dan AI menjawab pelanggan 24 jam dengan jawaban yang Anda kendalikan.
           </p>
-          <div className="mt-8 flex justify-center">
+          <div
+            className={`mt-8 flex justify-center ${landingReady ? "landing-entry landing-entry-delay-4" : "opacity-0"}`}
+          >
             <Button
               size="lg"
               className="cta-button"
