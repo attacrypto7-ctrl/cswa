@@ -167,10 +167,10 @@ export function DashboardShell({
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform,box-shadow] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0",
                   active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm shadow-emerald-500/10"
+                    : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground hover:shadow-md",
                 )}
               >
                 <item.icon className={cn("size-4", active && "text-primary")} />

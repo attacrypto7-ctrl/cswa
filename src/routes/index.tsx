@@ -436,7 +436,7 @@ function Landing() {
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <button className="flex cursor-pointer items-center gap-2.5 rounded-full border border-border bg-card/50 p-1 pr-3 transition-colors hover:bg-accent focus-visible:outline-none">
+                <button className="flex cursor-pointer items-center gap-2.5 rounded-full border border-border bg-card/50 p-1 pr-3 transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform,box-shadow] hover:bg-accent hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.97] active:translate-y-0 focus-visible:outline-none hover:shadow-lg hover:shadow-emerald-500/10">
                   <span className="relative flex size-8 shrink-0">
                     {avatarSrc && !avatarError ? (
                       <img
@@ -491,7 +491,7 @@ function Landing() {
             ) : (
               <button
                 onClick={() => setShowLogin(true)}
-                className="cursor-pointer rounded-xl bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] will-change-transform active:translate-y-0"
+                className="cursor-pointer rounded-xl bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform,box-shadow] hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(16,185,129,0.35)] active:scale-[0.97] active:translate-y-0"
               >
                 Masuk
               </button>
