@@ -404,7 +404,7 @@ function Landing() {
               </div>
             </div>
 
-            <div className="mt-7 flex flex-col items-center gap-1.5">
+            <div className="mt-16 sm:mt-20 flex flex-col items-center gap-1.5">
               <p className="loading-shimmer-text text-[14px] font-semibold tracking-[0.16em] sm:text-[15px]" style={{ willChange: "opacity", transform: "translateZ(0)" }}>
                 Memuat chatbot...
               </p>
