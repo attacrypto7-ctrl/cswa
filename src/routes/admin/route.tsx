@@ -68,6 +68,9 @@ function AdminLayout() {
     try {
       sessionStorage.removeItem("balasin_admin_auth");
     } catch {}
+    try {
+      sessionStorage.setItem("hasSeenLoading", "true");
+    } catch {}
   };
 
   return (
@@ -210,19 +213,20 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
             <div className="mt-8 flex items-center justify-between">
               <Link
                 to="/"
-                className="group flex items-center gap-2 text-xs font-semibold text-sky-200 transition-all duration-300 hover:text-sky-400"
+                onClick={() => { try { sessionStorage.setItem("hasSeenLoading", "true"); } catch {} }}
+                className="group flex cursor-pointer items-center gap-2 text-xs font-semibold text-sky-200 transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform,box-shadow] hover:scale-[1.02] hover:-translate-y-0.5 hover:text-sky-400 active:scale-[0.97] active:translate-y-0"
               >
-                <div className="flex size-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-950/30 shadow-[0_0_10px_rgba(56,189,248,0.1)] transition-all group-hover:-translate-x-1 group-hover:border-sky-400 group-hover:shadow-[0_0_15px_rgba(56,189,248,0.4)]">
+                <div className="flex size-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-950/30 shadow-[0_0_10px_rgba(56,189,248,0.1)] transition-all duration-200 group-hover:border-sky-400 group-hover:shadow-lg group-hover:shadow-sky-500/20 group-hover:brightness-110">
                   ←
                 </div>
                 Kembali ke beranda
               </Link>
               <Link
                 to="/app"
-                className="group flex items-center gap-2 text-xs font-semibold text-emerald-200 transition-all duration-300 hover:text-emerald-400"
+                className="group flex cursor-pointer items-center gap-2 text-xs font-semibold text-emerald-200 transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform,box-shadow] hover:scale-[1.02] hover:-translate-y-0.5 hover:text-emerald-400 active:scale-[0.97] active:translate-y-0"
               >
                 Dashboard Tenant →
-                <div className="flex size-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-950/30 shadow-[0_0_10px_rgba(16,185,129,0.1)] transition-all group-hover:translate-x-1 group-hover:border-emerald-400 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                <div className="flex size-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-950/30 shadow-[0_0_10px_rgba(16,185,129,0.1)] transition-all duration-200 group-hover:border-emerald-400 group-hover:shadow-lg group-hover:shadow-emerald-500/20 group-hover:brightness-110">
                   →
                 </div>
               </Link>

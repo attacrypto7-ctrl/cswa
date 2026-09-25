@@ -89,7 +89,7 @@ function MasukPage() {
             </Button>
           </form>
           <p className="text-center text-xs text-muted-foreground">
-            <Link to="/" className="hover:text-foreground">
+            <Link to="/" onClick={() => { try { sessionStorage.setItem("hasSeenLoading", "true"); } catch {} }} className="inline-flex cursor-pointer items-center gap-1 transition-all duration-200 cubic-bezier(0.4, 0, 0.2, 1) will-change-[transform] hover:scale-[1.02] hover:-translate-y-0.5 hover:text-foreground active:scale-[0.97] active:translate-y-0">
               ← Kembali ke beranda
             </Link>
           </p>

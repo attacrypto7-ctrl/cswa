@@ -119,6 +119,28 @@
   h3 {
     letter-spacing: -0.02em;
   }
+
+  button,
+  a,
+  [role="button"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="option"],
+  label:has(input[type="checkbox"]),
+  label:has(input[type="radio"]),
+  select,
+  summary,
+  .sidebar-item,
+  .nav-link,
+  .interactive-option {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  a[aria-disabled="true"],
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
 }
 
 @utility panel {
