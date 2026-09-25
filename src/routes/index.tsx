@@ -93,9 +93,21 @@ function Landing() {
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
   const [avatarError, setAvatarError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [showLoading, setShowLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(() => {
+    try {
+      return typeof window !== "undefined" ? sessionStorage.getItem("hasSeenLoading") !== "true" : true;
+    } catch {
+      return true;
+    }
+  });
   const [loadingFading, setLoadingFading] = useState(false);
-  const [landingReady, setLandingReady] = useState(false);
+  const [landingReady, setLandingReady] = useState(() => {
+    try {
+      return typeof window !== "undefined" ? sessionStorage.getItem("hasSeenLoading") === "true" : false;
+    } catch {
+      return false;
+    }
+  });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
   const googleClickLockRef = useRef(false);
@@ -137,10 +149,20 @@ function Landing() {
   }, []);
 
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem("hasSeenLoading") === "true") return;
+    } catch {
+      /* ignore storage access error */
+    }
     const fadeTimer = window.setTimeout(() => setLoadingFading(true), 2000);
     const hideTimer = window.setTimeout(() => {
       setShowLoading(false);
       setLandingReady(true);
+      try {
+        sessionStorage.setItem("hasSeenLoading", "true");
+      } catch {
+        /* ignore storage access error */
+      }
     }, 2520);
     return () => {
       window.clearTimeout(fadeTimer);
