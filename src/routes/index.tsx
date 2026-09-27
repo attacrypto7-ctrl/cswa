@@ -465,7 +465,7 @@ function Landing() {
       ) : null}
       <div className="surface-grid min-h-screen">
         <header
-          className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-6 ${landingReady ? "landing-entry landing-entry-delay-1" : "opacity-0"}`}
+          className={`relative z-10 mx-auto flex max-w-6xl items-center justify-between px-6 py-6 ${landingReady ? "landing-entry landing-entry-delay-1" : "opacity-0"}`}
         >
           <Link to="/" className="flex items-center gap-2 text-lg font-bold">
             <img
