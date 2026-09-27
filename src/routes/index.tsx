@@ -12,7 +12,7 @@ import {
   LogOut,
   UserPlus,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -82,6 +82,72 @@ const fitur = [
   },
 ];
 
+const LOADING_DURATION_MS = 4000;
+
+function LoadingProgressController({ onComplete }: { onComplete?: () => void }) {
+  const [percent, setPercent] = React.useState(0);
+  const animRef = useRef<{
+    startTime: number | null;
+    rafId: number | null;
+    completed: boolean;
+  }>({
+    startTime: null,
+    rafId: null,
+    completed: false,
+  });
+
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  React.useEffect(() => {
+    if (animRef.current.completed) return;
+
+    if (animRef.current.startTime === null) {
+      animRef.current.startTime = performance.now();
+    }
+
+    const animate = () => {
+      const startTime = animRef.current.startTime ?? performance.now();
+      const now = performance.now();
+      const elapsed = now - startTime;
+      const progress = Math.min(Math.max(elapsed / LOADING_DURATION_MS, 0), 1);
+      const nextPercent = Math.min(100, Math.floor(progress * 100));
+
+      setPercent(nextPercent);
+
+      if (progress < 1) {
+        animRef.current.rafId = requestAnimationFrame(animate);
+      } else {
+        setPercent(100);
+        if (!animRef.current.completed) {
+          animRef.current.completed = true;
+          onCompleteRef.current?.();
+        }
+      }
+    };
+
+    animRef.current.rafId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animRef.current.rafId !== null) {
+        cancelAnimationFrame(animRef.current.rafId);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center gap-2 mt-4 w-full">
+      <span className="text-emerald-400 font-mono font-bold text-sm tracking-wider">{percent}%</span>
+      <div className="w-64 max-w-xs h-2 bg-emerald-950/60 rounded-full border border-emerald-500/20 overflow-hidden relative shadow-inner">
+        <div
+          className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-300 transition-all duration-75 ease-out shadow-[0_0_12px_rgba(16,185,129,0.8)]"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function Landing() {
   const [showLogin, setShowLogin] = useState(false);
   const [email, setEmail] = useState("");
@@ -93,21 +159,9 @@ function Landing() {
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
   const [avatarError, setAvatarError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [showLoading, setShowLoading] = useState(() => {
-    try {
-      return typeof window !== "undefined" ? sessionStorage.getItem("hasSeenLoading") !== "true" : true;
-    } catch {
-      return true;
-    }
-  });
+  const [showLoading, setShowLoading] = useState(true);
   const [loadingFading, setLoadingFading] = useState(false);
-  const [landingReady, setLandingReady] = useState(() => {
-    try {
-      return typeof window !== "undefined" ? sessionStorage.getItem("hasSeenLoading") === "true" : false;
-    } catch {
-      return false;
-    }
-  });
+  const [landingReady, setLandingReady] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
   const googleClickLockRef = useRef(false);
@@ -148,14 +202,9 @@ function Landing() {
     };
   }, []);
 
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("hasSeenLoading") === "true") return;
-    } catch {
-      /* ignore storage access error */
-    }
-    const fadeTimer = window.setTimeout(() => setLoadingFading(true), 2000);
-    const hideTimer = window.setTimeout(() => {
+  const handleLoadingComplete = useRef(() => {
+    setLoadingFading(true);
+    window.setTimeout(() => {
       setShowLoading(false);
       setLandingReady(true);
       try {
@@ -163,12 +212,8 @@ function Landing() {
       } catch {
         /* ignore storage access error */
       }
-    }, 2520);
-    return () => {
-      window.clearTimeout(fadeTimer);
-      window.clearTimeout(hideTimer);
-    };
-  }, []);
+    }, 520);
+  }).current;
 
   useEffect(() => {
     return () => {
@@ -408,7 +453,8 @@ function Landing() {
               <p className="loading-shimmer-text text-[14px] font-semibold tracking-[0.16em] sm:text-[15px]" style={{ willChange: "opacity", transform: "translateZ(0)" }}>
                 Memuat chatbot...
               </p>
-              <div className="flex items-center gap-1.5" aria-hidden>
+              <LoadingProgressController onComplete={handleLoadingComplete} />
+              <div className="flex items-center gap-1.5 mt-2" aria-hidden>
                 <span className="loading-dot size-1 rounded-full bg-emerald-400" style={{ animationDelay: "0ms" } as React.CSSProperties} />
                 <span className="loading-dot size-1 rounded-full bg-emerald-400" style={{ animationDelay: "220ms" } as React.CSSProperties} />
                 <span className="loading-dot size-1 rounded-full bg-cyan-400" style={{ animationDelay: "440ms" } as React.CSSProperties} />
